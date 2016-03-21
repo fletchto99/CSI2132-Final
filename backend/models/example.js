@@ -17,5 +17,5 @@ exports.example = function(params, callback) {
     //    });
     //}
 
-    callback([{"hello": "world"}]);
+    callback(null, [{"hello": "world"}]);
 };
