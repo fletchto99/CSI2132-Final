@@ -1,0 +1,25 @@
+{
+  "name": "movide-db",
+  "version": "1.0.0",
+  "description": "A simple movie DB for our final CSI2132 project.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Langlois <fletchto99@gmail.com> (https://fletchto99.com)",
+  "contributors": [
+    {
+      "name": "Matt Langlois",
+      "email": "fletchto99@gmail.com"
+    },
+    {
+      "name": "Joel Faubert"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "pg": "^4.5.1"
+  }
+}
