@@ -6,11 +6,14 @@ var database = require('./database');
 var httpProxy = require('http-proxy');
 
 var app = express();
-var proxy = new httpProxy.RoutingProxy();
+var apiProxy = httpProxy.createProxyServer();
 
 app.use(function(req, res, next) {
     if(req.url.match(new RegExp('^\/api\/'))) {
-        proxy.proxyRequest(req, res, {host: "localhost", port: 8080});
+        apiProxy.web(req, res, {
+            host: "localhost",
+            port: 8080
+        });
         console.log("Proxying request");
     } else {
         console.log("Valid request");
