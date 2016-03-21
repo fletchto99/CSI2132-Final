@@ -3,8 +3,18 @@
 var express = require('express');
 var config = require('./config.json');
 var database = require('./database');
+var httpProxy = require('http-proxy');
 
 var app = express();
+var proxy = new httpProxy.RoutingProxy();
+
+app.use(function(req, res, next) {
+    if(req.url.match(new RegExp('^\/api\/'))) {
+        proxy.proxyRequest(req, res, {host: "localhost", port: 8080});
+    } else {
+        next();
+    }
+});
 
 app.use(require('./controllers'));
 
