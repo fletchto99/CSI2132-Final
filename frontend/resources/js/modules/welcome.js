@@ -36,7 +36,7 @@ MovieDB.createModule(function (MovieDB) {
 
         createElement({
             elem: 'h1',
-            textContent: 'Welcome to Tournament Maker',
+            textContent: 'Welcome to Movie Database',
             putIn: ContentPane
         });
 
