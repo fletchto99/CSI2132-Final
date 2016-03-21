@@ -5,6 +5,6 @@ module.exports = proxyMiddleware('/api', {
     changeOrigin: true,
     ws: true,
     pathRewrite: {
-        '^/remove/api' : ''
+        '^/api' : ''
     }
 });
