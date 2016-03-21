@@ -3,26 +3,22 @@
 var express = require('express');
 var config = require('./config.json');
 var database = require('./database');
-var httpProxy = require('http-proxy');
+var proxyMiddleware = require('http-proxy-middleware');
 
 var app = express();
-var apiProxy = httpProxy.createProxyServer();
 
-app.use(function(req, res, next) {
-    if(req.url.match(new RegExp('^\/api\/'))) {
-        apiProxy.web(req, res, {
-            target: {
-                host: "localhost",
-                port: config.port
-            }
-        });
-        console.log("Proxying request");
-    } else {
-        console.log("Valid request");
-        next();
+var context = '/api';
+
+var options = {
+    target: '127.0.0.1:8080',
+    changeOrigin: true,
+    ws: true,
+    pathRewrite: {
+        '^/remove/api' : '/api'
     }
-});
+};
 
+app.use(proxyMiddleware(context, options));
 app.use(require('./controllers'));
 
 database.connect(config.database, null, function(error) {
