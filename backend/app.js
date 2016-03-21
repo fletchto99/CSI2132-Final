@@ -11,8 +11,10 @@ var apiProxy = httpProxy.createProxyServer();
 app.use(function(req, res, next) {
     if(req.url.match(new RegExp('^\/api\/'))) {
         apiProxy.web(req, res, {
-            host: "localhost",
-            port: 8080
+            target: {
+                host: "localhost",
+                port: config.port
+            }
         });
         console.log("Proxying request");
     } else {
