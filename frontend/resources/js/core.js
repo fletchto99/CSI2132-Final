@@ -45,41 +45,47 @@
     MovieDB.init = function () {
 
         //check if a session is already in progress, if so resume it
-        MovieDB.data.request('resume-session').done(function (data) {
-            MovieDB.user = data;
+        //MovieDB.data.request('resume-session').done(function (data) {
+        //    MovieDB.user = data;
+        //
+        //    //Process our page and welcome the user
+        //    var start = function() {
+        //        MovieDB.processHashChange();
+        //        MovieDB.showAlert('Welcome to Tournament Maker ' + MovieDB.user.First_Name, 'info', 10000);
+        //    };
+        //
+        //    //Check if
+        //    if (MovieDB.user.Team_ID != null) {
+        //        MovieDB.data.get('team', {
+        //            Team_ID: MovieDB.user.Team_ID
+        //        }).done(function(data) {
+        //            MovieDB.user.Team = data;
+        //            start();
+        //        }).fail(function(data) {
+        //            MovieDB.showAlert(data.message, 'warning');
+        //            MovieDB.user.Team = null;
+        //            start();
+        //        })
+        //    } else {
+        //        MovieDB.user.Team = null;
+        //        start();
+        //    }
+        //
+        //
+        //
+        //}).fail(function () {
+        //    MovieDB.user = {
+        //        Person_ID: -1,
+        //        Role_Name: 'unauthenticated'
+        //    };
+        //    MovieDB.loadModule('welcome');
+        //});
 
-            //Process our page and welcome the user
-            var start = function() {
-                MovieDB.processHashChange();
-                MovieDB.showAlert('Welcome to Tournament Maker ' + MovieDB.user.First_Name, 'info', 10000);
-            };
-
-            //Check if
-            if (MovieDB.user.Team_ID != null) {
-                MovieDB.data.get('team', {
-                    Team_ID: MovieDB.user.Team_ID
-                }).done(function(data) {
-                    MovieDB.user.Team = data;
-                    start();
-                }).fail(function(data) {
-                    MovieDB.showAlert(data.message, 'warning');
-                    MovieDB.user.Team = null;
-                    start();
-                })
-            } else {
-                MovieDB.user.Team = null;
-                start();
-            }
-
-
-
-        }).fail(function () {
-            MovieDB.user = {
-                Person_ID: -1,
-                Role_Name: 'unauthenticated'
-            };
-            MovieDB.loadModule('welcome');
-        });
+        MovieDB.user = {
+            Person_ID: -1,
+            Role_Name: 'unauthenticated'
+        };
+        MovieDB.loadModule('welcome');
 
         //Listen for hash changes to determine page changes, maintaining state without reloading a page
         window.addEventListener('hashchange', MovieDB.processHashChange);
