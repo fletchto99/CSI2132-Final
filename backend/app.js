@@ -15,5 +15,6 @@ database.connect(config.database, null, function(error) {
         });
     } else {
         console.log("Error connecting to database!");
+        process.exit(1);
     }
 });
