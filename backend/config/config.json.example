@@ -1,8 +1,0 @@
-{
-    "database": {
-            "host": "localhost",
-            "port": 5432,
-            "database": "csi2132"
-    },
-    "port": 8080
-}

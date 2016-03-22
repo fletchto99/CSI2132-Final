@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var express = require('express');
-var config = require('./config/config.json');
+var appConfig = require('./config/app.json');
+var dbConfig = require('./config/database.json');
 var database = require('./app/database');
 
 var app = express();
@@ -9,9 +10,9 @@ var app = express();
 app.use(require('./app/middleware'));
 app.use(require('./app/controllers'));
 
-database.connect(config.database, null, function(error) {
+database.connect(dbConfig, null, function(error) {
     if (!error) {
-        app.listen(config.port, function() {
+        app.listen(appConfig.port, function() {
             console.log("Movie DB has started successfully")
         });
     } else {

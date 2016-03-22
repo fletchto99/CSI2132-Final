@@ -1,0 +1,9 @@
+{
+  "secret": "<session _secret>",
+  "name": "<session_name>",
+  "resave": false,
+  "saveUninitialized": true,
+  "cookie": {
+    "secure": true
+  }
+}
