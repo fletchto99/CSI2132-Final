@@ -6,8 +6,8 @@ var database = require('./app/database');
 
 var app = express();
 
-app.use(require('./app/middleware/proxy'));
-app.use(require('./controllers'));
+app.use(require('./app/middleware'));
+app.use(require('./app/controllers'));
 
 database.connect(config.database, null, function(error) {
     if (!error) {
