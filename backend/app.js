@@ -5,13 +5,12 @@ var appConfig = require('./config/app.json');
 var dbConfig = require('./config/database.json');
 var database = require('./app/database');
 
-var app = express();
-
-app.use(require('./app/middleware'));
-app.use(require('./app/controllers'));
-
 database.connect(dbConfig, null, function(error) {
     if (!error) {
+        var app = express();
+
+        app.use(require('./app/middleware'));
+        app.use(require('./app/controllers'));
         app.listen(appConfig.port, function() {
             console.log("Movie DB has started successfully")
         });
