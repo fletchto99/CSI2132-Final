@@ -1,5 +1,5 @@
 var database = require('../database');
 
 module.exports.example = function(callback) {
-    callback(null, [{"hello": "world2"}]);
+    callback(null, [{"hello": "world"}]);
 };
