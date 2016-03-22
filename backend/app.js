@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 var express = require('express');
-var config = require('./config.json');
-var database = require('./database');
+var config = require('./config/config.json');
+var database = require('./app/database');
 
 var app = express();
 
-app.use(require('./middleware/proxy'));
+app.use(require('./app/middleware/proxy'));
 app.use(require('./controllers'));
 
 database.connect(config.database, null, function(error) {
