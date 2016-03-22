@@ -1,13 +1,11 @@
+var database = require('../database');
+
 module.exports = function (req, res, next) {
-    if (!req.session || !req.session.name || !req.session.pass) {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        res.sendStatus(401);
-        return;
-    }
-    if (req.session.name === 'test' && req.session.pass === 'test') {
-        next();
+    if (!req.session || !req.session.user) {
+        res.status(401).json({
+            error: 'You are not authorized to access this page!'
+        })
     } else {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        res.sendStatus(401);
+        next();
     }
 };
