@@ -11,4 +11,4 @@ router.get('/', function(request, response) {
 
 });
 
-exports = router;
+module.exports = router;

@@ -24,4 +24,4 @@ router.post('/', function (req, res) {
 
 });
 
-exports = router;
+module.exports = router;

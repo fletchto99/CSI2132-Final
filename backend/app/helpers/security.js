@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 
-exports = {
+module.exports = {
     hashPassword: function(password, salt) {
         return crypto.createHash('sha1').update(password + salt).digest('base64');
     }

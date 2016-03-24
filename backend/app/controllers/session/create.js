@@ -19,4 +19,4 @@ router.put('/', function (request, response) {
 
 });
 
-exports = router;
+module.exports = router;

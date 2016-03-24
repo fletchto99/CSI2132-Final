@@ -4,7 +4,7 @@ var state = {
     connection: null
 };
 
-exports.connect = function(connection, schema, done) {
+module.exports.connect = function(connection, schema, done) {
     var database = new postgres.Client(connection);
     database.connect(function(error) {
         if (error) {
@@ -24,6 +24,6 @@ exports.connect = function(connection, schema, done) {
 
 };
 
-exports.get = function() {
+module.exports.get = function() {
     return state.connection;
 };

@@ -18,4 +18,4 @@ router.use('/test', require('./unauthenticated/test'));
  */
 router.use('/auth/whoami', require('./authenticated/whoami'));
 
-exports = router;
+module.exports = router;

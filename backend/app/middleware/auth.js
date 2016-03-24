@@ -1,6 +1,6 @@
 var database = require('../database');
 
-exports = function (req, res, next) {
+module.exports = function (req, res, next) {
     if (!req.session || !req.session.user) {
         res.status(401).json({
             error: 'You are not authorized to access this page!'

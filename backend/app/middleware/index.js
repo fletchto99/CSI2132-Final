@@ -11,4 +11,4 @@ router.use(session(require('../../config/session.json')));
 router.use('/auth', require('./auth'));
 
 
-exports = router;
+module.exports = router;
