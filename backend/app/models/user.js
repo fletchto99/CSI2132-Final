@@ -1,25 +1,35 @@
 var database = require('../database');
 
-module.exports.authenticate = function (params, callback) {
+module.exports = {
+    create: function(params, callback) {
+        var missing = [];
+        if (!params.username) {
+            missing.push('username');
+        }
+        if (!params.password) {
+            missing.push('password');
+        }
 
-    //TODO: Implement
+        if (missing.length > 0) {
+            callback({
+                missing_values: missing
+            }, null);
+            return;
+        }
 
-    //if (!params.sailor_id) {
-    //    callback({
-    //       error: "Missing sailor ID"
-    //    });
-    //} else {
-    //    database.get().query({
-    //        text: "SELECT * FROM SAILORS WHERE sid=$1",
-    //        values: [params.sailor_id]
-    //    }, function(error, result) {
-    //        if (!error) {
-    //            callback(null, result.rows);
-    //        }
-    //    });
-    //}
-};
+        database.get().query({
+            text: "SELECT * FROM Account WHERE Username = $1",
+            values: [params.username]
+        }, function(error, result) {
+            if (error) {
+                callback
+            } else {
 
-module.exports.create = function(params, callback) {
-    //TODO: Implement
+            }
+        })
+    },
+    
+    validate: function(params, callback) {
+        
+    }
 };
