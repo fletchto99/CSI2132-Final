@@ -9,7 +9,7 @@ database.connect(dbConfig, null, function(error) {
     if (!error) {
         var app = express();
 
-        app.use(require('./app/middleware'));
+        app.use('/api', require('./app/middleware'));
         app.use('/api', require('./app/controllers'));
         app.listen(appConfig.port, function() {
             console.log("Movie DB has started successfully")
