@@ -5,4 +5,4 @@ router.get('/', function (request) {
     request.session.destroy();
 });
 
-module.exports = router;
+exports = router;

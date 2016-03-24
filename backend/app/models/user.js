@@ -1,6 +1,6 @@
 var database = require('../database');
 
-module.exports.authenticate = function (params, callback) {
+exports.authenticate = function (params, callback) {
 
     //TODO: Implement
 
@@ -20,6 +20,6 @@ module.exports.authenticate = function (params, callback) {
     //}
 };
 
-module.exports.create = function(params, callback) {
+exports.create = function(params, callback) {
     //TODO: Implement
 };
