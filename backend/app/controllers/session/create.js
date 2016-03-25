@@ -2,7 +2,7 @@ var express = require('express');
 var user = require('../../models/user');
 var router = express.Router();
 
-router.put('/', function (request, response) {
+router.put('/', function (req, res) {
     if (request.session.user) {
         res.status(400).json({
             error: 'You must be logged out before creating a new user!'
