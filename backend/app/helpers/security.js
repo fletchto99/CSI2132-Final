@@ -2,11 +2,9 @@ var bcrypt = require('bcrypt');
 
 module.exports = {
     hashPassword: function(password) {
-        var salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(password, salt);
-        return {
-            salt: salt,
-            hash: hash
-        };
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    },
+    verifyPassword: function(password, hash) {
+        return bcrypt.compareSync(password, hash)
     }
 };

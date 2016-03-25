@@ -1,7 +1,6 @@
 module.exports = {
     validate: function (input, validation) {
         var errors = {};
-
         Object.keys(validation).forEach(function (key) {
             if (!(key in input)) {
                 errors[key] = "Expected a value";
@@ -22,7 +21,7 @@ module.exports = {
         }
     },
 
-    isString: function () {
+    isString: function (value) {
         if (typeof(value) !== 'string') {
             return 'Expected string'
         }

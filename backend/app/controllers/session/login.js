@@ -1,23 +1,16 @@
 var express = require('express');
 var user = require('../../models/user');
-var config = require('../../../config/app.json');
 var router = express.Router();
 
 router.post('/', function (req, res) {
     if (req.session.user != null) {
         res.json(req.session.user);
     } else {
-        user.authenticate({
-            username: req.body.username,
-            password: req.body.password
-        }, function (error, result) {
-            if (!error) {
-                res.json(result);
-            } else {
-                res.status(401).json({
-                    error: 'Invalid username or password'
-                });
-            }
+        user.authenticate(req.body).then(function (result) {
+            req.session.user = result;
+            res.json(req.session.user);
+        }, function (error) {
+            res.status(400).json(error);
         });
     }
 
