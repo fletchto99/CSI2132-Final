@@ -1,69 +1,82 @@
-/**
- *  Author(s)           :  Matt Langlois
- *  File Created        :  December 2015
- *  Details             :  This component is used to display a dismissible alert message at the bottom
- *                         right corner of the screen. Done using Bootstrap Notify library
- */
-(function () {
-    'use strict';
+function Modal(params) {
+    var modal = this;
 
-    /**
-     * Binds the window's keyup functionality to listen to the enter key.
-     * This enables modal's to take action when the enter key is pressed
-     *
-     * @param e The key event
-     */
-    window.onkeyup = function (e) {
-        if (e.which == 13 && MovieDB.modalOpen == true) {
-            //triger the "save" button
-            document.getElementById('ModalButton').onclick();
+    this.elem = E('div', {
+        className: 'floating-box shade'
+    });
+
+    this.dialog = E('div', {
+        className: 'modal-dialog',
+        parent: this.elem
+    });
+
+    var content = E('div', {
+        className: 'modal-content',
+        parent: this.dialog
+    });
+
+    this.header = E('div', {
+        className: 'modal-header',
+        parent: content
+    });
+
+    var close = E('button', {
+        className: 'close',
+        textContent: '×',
+        onclick: this.close.bind(this),
+        parent: this.header
+    });
+
+    if (params.title) {
+        E('h4', {
+            className: 'modal-title',
+            textContent: params.title,
+            parent: this.header
+        });
+    }
+
+    this.body = E('div', {
+        className: 'modal-body',
+        parent: content
+    });
+
+    this.keydown = function(e) {
+        var keyCode = e.keyCode;
+        if (keyCode == 27) {
+            modal.close();
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+}
+
+Modal.prototype.open = function() {
+    document.body.appendChild(this.elem);
+    window.addEventListener('keydown', this.keydown, false);
+    this.elem.animate([
+        {opacity: 0},
+        {opacity: 1}
+    ], 150);
+};
+
+Modal.prototype.close = function() {
+    var modal = this;
+
+    this.dialog.animate([
+        {transform: 'scale(1)'},
+        {transform: 'scale(1.1)'},
+        {transform: 'scale(0.3)'}
+    ], 150);
+
+    this.elem.animate([
+        {opacity: 1},
+        {opacity: 0}
+    ], 150).onfinish = function() {
+        var parent = modal.elem.parentElement;
+        if (parent) {
+            parent.removeChild(modal.elem);
         }
     };
 
-    /**
-     * Displays a full screen modal window
-     *
-     * @param modalTitle The title of the modal window
-     * @param modalContent The content of the modal window
-     * @param buttonTitle The title of the save button (TODO: ideally this would be an array of objects which would be rendered into buttons)
-     * @param onSubmit The action to perform when the save button is pressed
-     */
-    MovieDB.showModal = function (modalTitle, modalContent, buttonTitle, onSubmit) {
-
-        //Prepare the mainmodal
-        var modal = $('#MainModal');
-        modal.modal({
-            show: false
-        });
-
-        //update the contents and events of the main modal
-        document.getElementById('ModalContent').innerHTML = "";
-        document.getElementById('ModalContent').appendChild(modalContent);
-        document.getElementById('ModalTitle').textContent = modalTitle;
-        document.getElementById('ModalButton').textContent = buttonTitle;
-        document.getElementById('ModalButton').onclick = function(event) {
-            var dismiss = true;
-
-            if (typeof(onSubmit) == 'function') {
-                dismiss = onSubmit();
-            }
-            dismiss && modal.modal('hide');
-            if (event) {
-                event.preventDefault();
-            }
-        };
-
-        //set the modal as visible
-        modal.modal('show');
-        MovieDB.modalOpen = true;
-    };
-
-    /**
-     * Hides any open modal windows
-     */
-    MovieDB.hideModal = function() {
-        $('#MainModal').modal('hide');
-        MovieDB.modalOpen = false;
-    }
-
-})();
+    window.removeEventListener('keydown', this.keydown);
+};

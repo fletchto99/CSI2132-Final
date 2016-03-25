@@ -1,174 +1,100 @@
-/**
- *  Author(s)           :  Matt Langlois
- *  File Created        :  December 2015
- *  Application Path    :  /#welcome
- *  Details             :  Module to display welcome screen
- */
+'use strict';
 
-MovieDB.createModule(function (MovieDB) {
-    'use strict';
+app.module(function(E, ajax) {
+    return {
 
-    /**
-     * The properties of the welcome module
-     */
-    var Module = {
-        id: 'welcome', // Appears in address bar. Used in Links.
-        title: 'Welcome', // Used in title
-        visible_in_nav_bar: false,
-        navbar_visible: false
+        navbarVisible: true,
+
+        css: [
+            'resources/css/modules/welcome.css'
+        ],
+
+        display: function(container) {
+            var floatingBox = E('div', {
+                className: 'floating-box',
+                parent: container
+            });
+
+            var modal = E('div', {
+                className: 'login modal-dialog',
+                parent: floatingBox
+            });
+
+            E('h2', {
+                className: 'login-title',
+                textContent: 'Movie Database',
+                parent: modal
+            });
+
+            var content = E('div', {
+                className: 'login-content modal-content',
+                parent: modal
+            });
+
+            var tabs = new Tabs({
+                parent: content
+            });
+
+            var login = form({
+                action: 'login',
+                method: 'post',
+                inputs: [{
+                    param: 'id',
+                    label: 'Username'
+                }, {
+                    param: 'password',
+                    label: 'Password',
+                    type: 'password'
+                }],
+                submit: {
+                    label: 'Login',
+                    then: function(user) {
+                        app.user = user;
+                        modal.animate([
+                            {transform: 'translateX(0px)'},
+                            {transform: 'translateX(-500px)'}
+                        ], 150).onfinish = function() {
+                            modal.parentElement.removeChild(modal);
+                            app.load('dashboard');
+                        };
+                    }
+                }
+            });
+
+            tabs.add('Login', login);
+
+            var register = form({
+                action: 'user',
+                method: 'put',
+                inputs: [{
+                    param: 'id',
+                    label: 'Username'
+                }, {
+                    param: 'password',
+                    label: 'Password',
+                    type: 'password'
+                }, {
+                    param: 'name',
+                    label: 'Name'
+                }, {
+                    param: 'email',
+                    label: 'Email'
+                }],
+                submit: {
+                    label: 'Register',
+                    then: function() {
+                        new Alert({
+                            message: 'Account created',
+                            timeout: true
+                        }).open();
+
+                        tabs.focus('Login');
+                    }
+                }
+            });
+
+            tabs.add('Register', register);
+
+        }
     };
-
-    /**
-     * Called when the module is removed
-     */
-    Module.unload = function () {
-
-    };
-
-    /**
-     * The main display function of the module, called when the module is loaded by the system
-     *
-     * @param ContentPane The content pane for element to be drawn in
-     * @param parameters The parameters passed to the module
-     * @returns {boolean} True if the module was displayed successfully; otherwise false
-     */
-    Module.display = function (ContentPane, parameters) {
-
-        createElement({
-            elem: 'h1',
-            textContent: 'Welcome to Movie Database',
-            putIn: ContentPane
-        });
-
-        var usernameInput = createElement({
-            elem: 'input',
-            type: 'text',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'Username',
-                required: '',
-                autofocus: ''
-            }
-        });
-
-        var passwordInput = createElement({
-            elem: 'input',
-            type: 'password',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'Password',
-                required: ''
-            }
-        });
-
-        var createAccountUsername = createElement({
-            elem: 'input',
-            type: 'text',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'Username',
-                required: '',
-                autofocus: ''
-            }
-        });
-
-        var createAccountPassword = createElement({
-            elem: 'input',
-            type: 'password',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'Password',
-                required: ''
-            }
-        });
-
-        var firstnameInput = createElement({
-            elem: 'input',
-            type: 'text',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'First Name',
-                required: '',
-                autofocus: ''
-            }
-        });
-
-        var lastnameInput = createElement({
-            elem: 'input',
-            type: 'text',
-            className: 'form-control',
-            attributes: {
-                placeHolder: 'Last Name',
-                required: '',
-                autofocus: ''
-            }
-        });
-
-        var loginForm = createElement({
-            elem: 'div',
-            inside: [
-                usernameInput,
-                passwordInput
-            ]
-        });
-
-        var createAccountForm = createElement({
-            elem: 'div',
-            inside: [
-                createAccountUsername,
-                createAccountPassword,
-                firstnameInput,
-                lastnameInput
-            ]
-        });
-
-        createElement({
-            elem: 'button',
-            textContent: 'Login',
-            className: 'block-btn welcomebtn btn btn-info btn-lg',
-            onclick: function () {
-                MovieDB.showModal('Login', loginForm,
-                    'Login',
-                    function () {
-                        MovieDB.data.login(usernameInput.value, passwordInput.value).done(function (data) {
-                            MovieDB.user = data;
-                            MovieDB.loadModule('main');
-                            MovieDB.showAlert('Welcome to Tournament Maker ' + MovieDB.user.First_Name, 'info', 10000);
-                        }).fail(function (error) {
-                            MovieDB.showAlert(error.message, 'danger');
-                        });
-                        return false;
-                    });
-            },
-            putIn: ContentPane
-        });
-
-        createElement({
-            elem: 'button',
-            textContent: 'Create User',
-            className: 'block-btn welcomebtn btn btn-info btn-lg',
-            onclick: function () {
-                MovieDB.showModal('Create Account', createAccountForm,
-                    'Login',
-                    function () {
-                        MovieDB.data.update('create-user',{
-                            Username: createAccountUsername.value,
-                            Password: createAccountPassword.value,
-                            First_Name: firstnameInput.value,
-                            Last_Name: lastnameInput.value
-                        }).done(function (data) {
-                            MovieDB.user = data;
-                            MovieDB.loadModule('main');
-                            MovieDB.showAlert('Welcome to Tournament Maker ' + MovieDB.user.First_Name, 'info', 10000);
-                        }).fail(function (error) {
-                            MovieDB.showAlert(error.message, 'danger');
-                        });
-                    })
-            },
-            putIn: ContentPane
-        });
-        return true;
-    };
-
-    return Module;
 });

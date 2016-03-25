@@ -1,0 +1,33 @@
+.floating-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.shade {
+    background-color: rgba(0,0,0,0.8);
+}
+
+.alert {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+button.close {
+    outline: none;
+}
+
+.navbar-container {
+    display: none;
+}

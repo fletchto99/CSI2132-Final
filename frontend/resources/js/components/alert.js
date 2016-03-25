@@ -1,35 +1,59 @@
-/**
- *  Author(s)           :  Matt Langlois
- *  File Created        :  December 2015
- *  Details             :  This component is used to display a dismissible alert message at the bottom
- *                         right corner of the screen. Done using Bootstrap Notify library
- */
-(function () {
-    'use strict';
+function Alert(params) {
+    if (!params) {
+        params = {};
+    }
 
-    /**
-     * Displays an alert bubble at the bottom right corner of the screen
-     *
-     * @param message The message to display
-     * @param style The style of the alert, according to bootstrap's themes
-     * @param dismissAfter The amount of time before the alert automatically dismisses, if undefined then it will stay open until the user dismisses the alert
-     */
-    MovieDB.showAlert = function(message, style, dismissAfter) {
-        $.notify({
-            message: message
-        },{
-            type: style,
-            placement: {
-                from: "bottom",
-                align: "right"
-            },
-            animate: {
-                enter: 'animated fadeInUp',
-                exit: 'animated rollOut'
-            },
-            z_index: 99999999,
-            delay: dismissAfter || 0
-        });
+    if (params.timeout === true) {
+        this.timeout = 1000;
+    } else {
+        this.timeout = params.timeout;
+    }
+
+    this.elem = E('div', {
+        className: 'alert alert-' + (params.type || 'success')
+    });
+
+    E('button', {
+        className: 'close',
+        textContent: '×',
+        onclick: this.close.bind(this),
+        parent: this.elem
+    });
+
+    E('p', {
+        className: 'message',
+        innerHTML: params.message,
+        parent: this.elem
+    });
+}
+
+Alert.prototype.open = function() {
+    var alert = this;
+
+    document.body.appendChild(this.elem);
+    this.elem.animate([
+        {opacity: 0},
+        {opacity: 1}
+    ], 150).onfinish = function() {
+        if (alert.timeout) {
+            setTimeout(function() {
+                alert.close();
+            }, alert.timeout);
+        }
     };
+};
 
-})();
+Alert.prototype.close = function() {
+    var alert = this;
+
+    this.elem.animate([
+        {opacity: 1, transform: 'scale(1)'},
+        {opacity: 1, transform: 'scale(1.1)'},
+        {opacity: 0, transform: 'scale(0.3)'}
+    ], 150).onfinish = function() {
+        var parent = alert.elem.parentElement;
+        if (parent) {
+            parent.removeChild(alert.elem);
+        }
+    }
+};
