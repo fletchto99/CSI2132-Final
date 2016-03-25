@@ -32,7 +32,7 @@ module.exports = {
                 var secure_password = security.hashPassword(params.password);
 
                 return database.query({
-                    text: 'INSERT INTO Account(Username, Password, Salt, Email) VALUES ($1, $2, $3)',
+                    text: 'INSERT INTO Account(Username, Password, Salt, Email) VALUES ($1, $2, $3, $4)',
                     values: [params.username, secure_password.hash, secure_password.salt, params.email]
                 });
             }, function () {
@@ -47,7 +47,7 @@ module.exports = {
                 })
             }, function() {
                 reject({
-                    error: 'An unexpected error has occured! Please try again later.'
+                    error: 'An unexpected error has occurred! Please try again later.'
                 })
             })
         });
