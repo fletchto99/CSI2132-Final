@@ -11,7 +11,7 @@ module.exports = {
                 email: validator.isEmail
             });
 
-            if (errors.length > 0) {
+            if (Object.keys(errors).length > 0) {
                 reject({
                     error: true,
                     type: 'validation',
