@@ -22,7 +22,7 @@ app.module(function(E, ajax) {
 
             E('h2', {
                 className: 'login-title',
-                textContent: 'Movie Database',
+                textContent: 'Movie DB',
                 parent: modal
             });
 
