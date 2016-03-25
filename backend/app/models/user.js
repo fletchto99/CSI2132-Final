@@ -3,7 +3,7 @@ var validator = require('../helpers/validator');
 var security = require('../helpers/security');
 
 module.exports = {
-    create: function(params) {
+    register: function(params) {
         return new Promise(function(resolve, reject) {
             var errors = validator.validate(params, {
                 username: validator.isString,

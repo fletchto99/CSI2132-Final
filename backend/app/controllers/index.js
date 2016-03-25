@@ -6,7 +6,7 @@ var router = express.Router();
  */
 router.use('/login', require('./session/login'));
 router.use('/logout', require('./session/logout'));
-router.use('/create', require('./session/create'));
+router.use('/register', require('./session/register'));
 
 /**
  * Open API endpoints

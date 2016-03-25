@@ -8,7 +8,7 @@ router.put('/', function (req, res) {
             error: 'You must be logged out before creating a new user!'
         });
     } else {
-        user.create(req.body).then(function (result) {
+        user.register(req.body).then(function (result) {
             req.session.user = result;
             res.json(req.session.user);
         }, function (error) {
