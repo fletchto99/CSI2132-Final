@@ -3,20 +3,21 @@ var user = require('../../models/user');
 var router = express.Router();
 
 router.put('/', function (request, response) {
-    user.create({
-        username: req.body.username,
-        password: req.body.password
-    }, function (error, result) {
-        if (!error) {
+    if (request.session.user) {
+        res.status(400).json({
+            error: 'You must be logged out before creating a new user!'
+        });
+    } else {
+        user.create({
+            username: req.body.username,
+            password: req.body.password
+        }).then(function (result) {
             request.session.user = result;
-            response.json(result);
-        } else {
-            response.status(401).json({
-                error: 'Invalid username or password'
-            });
-        }
-    });
-
+            response.json(request.session.user);
+        }, function (error) {
+            response.status(400).json(error);
+        });
+    }
 });
 
 module.exports = router;

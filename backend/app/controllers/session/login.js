@@ -1,6 +1,5 @@
 var express = require('express');
 var user = require('../../models/user');
-var security = require('../../helpers/security');
 var config = require('../../../config/app.json');
 var router = express.Router();
 
