@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (request) {
+router.post('/', function (request) {
     request.session.destroy();
 });
 
