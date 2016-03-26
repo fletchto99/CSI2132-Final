@@ -12,7 +12,7 @@ module.exports = {
             }
         });
 
-        return errors;
+        return Object.keys(errors).length > 0 ? errors : null;
     },
 
     isInteger: function (value) {

@@ -11,7 +11,7 @@ module.exports = {
                 email: validator.isEmail
             });
 
-            if (Object.keys(errors).length > 0) {
+            if (errors) {
                 reject({
                     error: true,
                     type: 'validation',
@@ -33,13 +33,13 @@ module.exports = {
                 }
 
                 var secure_password = security.hashPassword(params.password);
-                console.log(secure_password);
+
                 return database.query({
                     text: 'INSERT INTO Account(Username, Password, Email) VALUES ($1, $2, $3)',
                     values: [params.username, secure_password, params.email]
                 });
             }, function () {
-                console.log(error);
+
                 reject({
                     error: 'Error checking username, please try again later!'
                 });
@@ -63,7 +63,7 @@ module.exports = {
                 password: validator.isString
             });
 
-            if (Object.keys(errors).length > 0) {
+            if (errors) {
                 reject({
                     error: true,
                     type: 'validation',
