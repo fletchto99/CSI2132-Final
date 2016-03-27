@@ -1,4 +1,5 @@
 {
   "app_name": "Movie DB",
-  "port": 8080
+  "port": 8080,
+  "developer_mode": false
 }

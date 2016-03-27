@@ -3,3 +3,4 @@ config.json
 backend/config/app.json
 backend/config/database.json
 backend/config/session.json
+backend/sessions

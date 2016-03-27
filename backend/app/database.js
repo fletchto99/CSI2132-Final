@@ -19,7 +19,6 @@ module.exports = {
                     console.log("Connection to database successful!");
                     resolve();
                 }
-
             });
         });
     },

@@ -92,9 +92,10 @@ module.exports = {
                         error: 'Invalid username or password!'
                     });
                 }
-            }, function () {
+            }, function (error) {
                 reject({
-                    error: 'Error logging in, please try again later!'
+                    error: 'Error logging in, please try again later!',
+                    dev_error: error
                 });
             });
         });

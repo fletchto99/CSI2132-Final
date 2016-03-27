@@ -11,7 +11,6 @@ router.use('/register', require('./session/register'));
 /**
  * Open API endpoints
  */
-router.use('/test', require('./unauthenticated/test'));
 
 /**
  * Authenticated api endpoints
