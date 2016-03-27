@@ -4,7 +4,7 @@ function Alert(params) {
     }
 
     if (params.timeout === true) {
-        this.timeout = 1000;
+        this.timeout = 5000;
     } else {
         this.timeout = params.timeout;
     }

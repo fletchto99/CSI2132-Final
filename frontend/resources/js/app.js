@@ -4,8 +4,9 @@ var app = (function(window, document, E, ajax) {
     var app = {};
 
     var moduleContainer = null;
-    var moduleDefault = 'login';
+    var moduleDefault = 'welcome';
     var currentModule = null;
+    var lastModule = null;
     var navbarContainer = null;
 
     app.start = function() {
@@ -72,7 +73,7 @@ var app = (function(window, document, E, ajax) {
                     onclick: function() {
                         ajax.post('logout').then(function() {
                             delete app.user;
-                            app.load('login');
+                            app.load('welcome');
                         });
                     }
                 })],
@@ -91,7 +92,7 @@ var app = (function(window, document, E, ajax) {
         window.addEventListener('hashchange', hashchange, false);
 
         // Handle ajax errors
-        ajax.onerror = function(xhr) {
+        ajax.onerror = function(xhr, response, reject) {
             if (xhr.status === 401) {
                 delete app.user;
                 app.load('welcome');
@@ -104,13 +105,16 @@ var app = (function(window, document, E, ajax) {
                     message: xhr.status + ' Error!',
                     type: 'danger'
                 }).open();
+                reject(response)
+            } else {
+                reject(response);
             }
         };
 
         // Authenticate the user, otherwise redirect to login module
         ajax.post('login').then(function(user) {
             app.user = user;
-            hashchange();
+            app.load('portal')
         }, function() {
             app.load('welcome');
         });
@@ -120,7 +124,7 @@ var app = (function(window, document, E, ajax) {
         if (!id) id = moduleDefault;
 
         var load = function() {
-            var lastModule = currentModule;
+            lastModule = currentModule;
             currentModule = {
                 id: id,
                 obj: null,
@@ -155,7 +159,7 @@ var app = (function(window, document, E, ajax) {
 
                     moduleContainer.animate([
                         {opacity: 0},
-                        {opacity: 1},
+                        {opacity: 1}
                     ], 150);
 
                     document.head.removeChild(this);
@@ -185,21 +189,22 @@ var app = (function(window, document, E, ajax) {
 
         var display = function() {
             module.display(moduleContainer);
+            var anim;
             if (module.navbarVisible) {
-                var anim = navbarContainer.animate([
+                anim = navbarContainer.animate([
                     {opacity: 0},
                     {opacity: 1}
                 ], 150);
                 anim.onfinish = function() {
-                    navbarContainer.style.display = 'visible';
+                    navbarContainer.style.opacity = 1;
                 };
             } else {
-                var anim = navbarContainer.animate([
+                anim = navbarContainer.animate([
                     {opacity: 1},
                     {opacity: 0}
                 ], 150);
                 anim.onfinish = function() {
-                    navbarContainer.style.display = 'none';
+                    navbarContainer.style.opacity = 0;
                 };
 
             }
@@ -209,38 +214,66 @@ var app = (function(window, document, E, ajax) {
             ], 250);
         };
 
-        if (module.css) {
-            var numLeft = module.css.length;
-            var cssLoaded = function(css, success) {
-                if (success) {
-                    currentModule.css.push(css);
-                } else {
-                    document.head.removeChild(css);
+        if (typeof(module.preconditions) == 'function' && !module.preconditions()) {
+            var error = new Modal({
+                title: "Insufficient Permissions!",
+                onclose: function() {
+                    app.load(lastModule.id);
                 }
-
-                if (--numLeft === 0) {
-                    display();
-                }
-            };
-
-            module.css.forEach(function(href) {
-                var css = E('link', {
-                    href: href,
-                    rel: 'stylesheet',
-                    type: 'text/css',
-                    parent: document.head,
-                    onload: function() {
-                        cssLoaded(this, true);
-                        this.onload = null;
-                    },
-                    onerror: function() {
-                        cssLoaded(this, false);
-                        this.onerror = null;
-                    }
-                });
             });
+
+            E('div', {
+                children: [
+                    E('p', {
+                        textContent: 'You are not permitted to view this page!'
+                    }),
+                    E('button', {
+                        textContent: 'Go Back',
+                        className: 'btn btn-primary center',
+                        onclick: function () {
+                            error.close();
+                            app.load(lastModule.id);
+                        }
+                    })
+                ],
+                parent: error.body
+            });
+
+            error.open();
         } else {
-            display();
+            if (module.css) {
+                var numLeft = module.css.length;
+                var cssLoaded = function(css, success) {
+                    if (success) {
+                        currentModule.css.push(css);
+                    } else {
+                        document.head.removeChild(css);
+                    }
+
+                    if (--numLeft === 0) {
+                        display();
+                    }
+                };
+
+                module.css.forEach(function(href) {
+                    var css = E('link', {
+                        href: href,
+                        rel: 'stylesheet',
+                        type: 'text/css',
+                        parent: document.head,
+                        onload: function() {
+                            cssLoaded(this, true);
+                            this.onload = null;
+                        },
+                        onerror: function() {
+                            cssLoaded(this, false);
+                            this.onerror = null;
+                        }
+                    });
+                });
+            } else {
+                display();
+            }
         }
 
         currentModule.obj = module;

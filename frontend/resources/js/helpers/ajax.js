@@ -23,9 +23,10 @@ window.ajax = (function () {
                     resolve(response);
                 } else {
                     if (ajax.onerror) {
-                        ajax.onerror(this);
+                        ajax.onerror(this, response, reject);
+                    } else {
+                        reject(response)
                     }
-                    reject(response);
                 }
             });
 

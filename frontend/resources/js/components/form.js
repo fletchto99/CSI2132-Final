@@ -100,7 +100,7 @@ function form(params) {
 
             ajax[params.method || 'post'](params.action, data)
                 .then(params.submit.then, function(err) {
-                    var invalid = err.invalid;
+                    var invalid = Object.keys(err.rejected_parameters);
                     if (!invalid) {
                         new Alert({
                             message: 'There was an error processing your request',

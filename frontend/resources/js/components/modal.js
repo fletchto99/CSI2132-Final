@@ -23,7 +23,7 @@ function Modal(params) {
     var close = E('button', {
         className: 'close',
         textContent: '×',
-        onclick: this.close.bind(this),
+        onclick: this.close.bind(this, params.onclose || undefined),
         parent: this.header
     });
 
@@ -43,7 +43,7 @@ function Modal(params) {
     this.keydown = function(e) {
         var keyCode = e.keyCode;
         if (keyCode == 27) {
-            modal.close();
+            modal.close(params.cb || undefined);
             e.preventDefault();
             e.stopPropagation();
         }
@@ -59,7 +59,7 @@ Modal.prototype.open = function() {
     ], 150);
 };
 
-Modal.prototype.close = function() {
+Modal.prototype.close = function(cb) {
     var modal = this;
 
     this.dialog.animate([
@@ -75,6 +75,9 @@ Modal.prototype.close = function() {
         var parent = modal.elem.parentElement;
         if (parent) {
             parent.removeChild(modal.elem);
+        }
+        if (cb) {
+            cb();
         }
     };
 

@@ -39,7 +39,7 @@ app.module(function(E, ajax) {
                 action: 'login',
                 method: 'post',
                 inputs: [{
-                    param: 'id',
+                    param: 'username',
                     label: 'Username'
                 }, {
                     param: 'password',
@@ -55,7 +55,7 @@ app.module(function(E, ajax) {
                             {transform: 'translateX(-500px)'}
                         ], 150).onfinish = function() {
                             modal.parentElement.removeChild(modal);
-                            app.load('dashboard');
+                            app.load('portal');
                         };
                     }
                 }
@@ -64,10 +64,10 @@ app.module(function(E, ajax) {
             tabs.add('Login', login);
 
             var register = form({
-                action: 'user',
+                action: 'register',
                 method: 'put',
                 inputs: [{
-                    param: 'id',
+                    param: 'username',
                     label: 'Username'
                 }, {
                     param: 'password',
@@ -82,13 +82,14 @@ app.module(function(E, ajax) {
                 }],
                 submit: {
                     label: 'Register',
-                    then: function() {
+                    then: function(user) {
                         new Alert({
                             message: 'Account created',
                             timeout: true
                         }).open();
 
-                        tabs.focus('Login');
+                        app.user = user;
+                        app.load('portal');
                     }
                 }
             });
