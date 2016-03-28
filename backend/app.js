@@ -8,6 +8,7 @@ var database = require('./app/database');
 database.connect(dbConfig, null).then(function () {
     var app = express();
 
+    app.set('trust proxy', 1); //Trust Nginx reverse proxy
     app.use('/api', require('./app/middleware'));
     app.use('/api', require('./app/controllers'));
     app.listen(appConfig.port, function () {
