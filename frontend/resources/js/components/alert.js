@@ -32,8 +32,8 @@ Alert.prototype.open = function() {
 
     document.body.appendChild(this.elem);
     this.elem.animate([
-        {opacity: 0},
-        {opacity: 1}
+        {opacity: 0, transform: 'translateY(50px)'},
+        {opacity: 1, transform: 'translateY(0)'}
     ], 150).onfinish = function() {
         if (alert.timeout) {
             setTimeout(function() {
@@ -47,9 +47,8 @@ Alert.prototype.close = function() {
     var alert = this;
 
     this.elem.animate([
-        {opacity: 1, transform: 'scale(1)'},
-        {opacity: 1, transform: 'scale(1.1)'},
-        {opacity: 0, transform: 'scale(0.3)'}
+        {opacity: 1, transform: 'translateY(0)'},
+        {opacity: 0, transform: 'translateY(50px)'}
     ], 150).onfinish = function() {
         var parent = alert.elem.parentElement;
         if (parent) {
