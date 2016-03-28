@@ -4,10 +4,10 @@ app.module(function(E, ajax) {
     return {
 
         navbarVisible: true,
-
-        css: [
-            'resources/css/modules/login.css'
-        ],
+        //
+        // css: [
+        //     'resources/css/modules/portal.css'
+        // ],
 
         preconditions: function() {
             return app.user !== undefined;

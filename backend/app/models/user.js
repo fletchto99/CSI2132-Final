@@ -45,7 +45,7 @@ module.exports = {
                 });
             }).then(function() {
                 resolve({
-                    user: params.username,
+                    username: params.username,
                     email: params.email
                 })
             }, function(error) {

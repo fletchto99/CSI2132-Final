@@ -114,7 +114,11 @@ var app = (function(window, document, E, ajax) {
         // Authenticate the user, otherwise redirect to login module
         ajax.post('login').then(function(user) {
             app.user = user;
-            app.load('portal')
+            app.load('portal');
+            new Alert({
+                message: 'Welcome, ' + app.user.username,
+                timeout: true
+            }).open();
         }, function() {
             app.load('welcome');
         });

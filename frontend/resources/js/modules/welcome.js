@@ -51,11 +51,15 @@ app.module(function(E, ajax) {
                     then: function(user) {
                         app.user = user;
                         modal.animate([
-                            {transform: 'translateX(0px)'},
-                            {transform: 'translateX(-500px)'}
+                            {transform: 'scale(1, 1'},
+                            {transform: 'scale(0, 0)'}
                         ], 150).onfinish = function() {
                             modal.parentElement.removeChild(modal);
                             app.load('portal');
+                            new Alert({
+                                message: 'Welcome, ' + app.user.username,
+                                timeout: true
+                            }).open();
                         };
                     }
                 }
@@ -89,7 +93,14 @@ app.module(function(E, ajax) {
                         }).open();
 
                         app.user = user;
-                        app.load('portal');
+
+                        modal.animate([
+                            {transform: 'scale(1, 1'},
+                            {transform: 'scale(0, 0)'}
+                        ], 150).onfinish = function () {
+                            modal.parentElement.removeChild(modal);
+                            app.load('portal');
+                        };
                     }
                 }
             });
