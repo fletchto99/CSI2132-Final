@@ -17,19 +17,19 @@ module.exports = {
 
     isInteger: function (value) {
         if (typeof(value) === 'number' && isFinite(value) && Math.floor(value) === value) {
-            return 'Expected integer';
+            return 'Expected an integer';
         }
     },
 
     isString: function (value) {
-        if (typeof(value) !== 'string') {
-            return 'Expected string'
+        if (typeof(value) !== 'string' || value.length == 0) {
+            return 'Expected a string'
         }
     },
     
     isEmail: function (value) {
-        if(!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.exec(value))) {
-            return 'Expected email address'
+        if(typeof(value) !== 'string' || value.length == 0 ||  !(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.exec(value))) {
+            return 'Expected an email address'
         }
     }
 };

@@ -100,47 +100,50 @@ function form(params) {
 
             ajax[params.method || 'post'](params.action, data)
                 .then(params.submit.then, function(err) {
-                    var invalid = Object.keys(err.rejected_parameters);
-                    if (!invalid) {
+
+                    if (typeof(err.error) == 'string') {
                         new Alert({
-                            message: 'There was an error processing your request',
+                            message: err.error,
+                            type: 'danger',
+                            timeout: false
+                        }).open();
+                    } else {
+                        var invalid = Object.keys(err.rejected_parameters);
+                        if (!invalid) {
+                            new Alert({
+                                message: 'There was an error processing your request',
+                                type: 'danger',
+                                timeout: true
+                            }).open();
+
+                            if (params.catch) {
+                                params.catch(err);
+                            }
+
+                            return;
+                        }
+
+                        // Show an alert if there are invalid fields
+                        var message;
+                        if (invalid.length === 1) {
+                            message = 'Invalid ' + (inputMap[invalid[0]].label || invalid[0]) + '. ' + err.rejected_parameters[invalid[0]] + '!';
+                        } else if (invalid.length > 1) {
+                            message = 'Form contains invalid fields';
+                        }
+
+                        new Alert({
+                            message: message,
                             type: 'danger',
                             timeout: true
                         }).open();
 
-                        if (params.catch) {
-                            params.catch(err);
-                        }
-
-                        return;
-                    }
-
-                    // Show an alert if there are invalid fields
-                    var message;
-                    if (invalid.length === 1) {
-                        message = 'Invalid ' + inputMap[invalid[0]].label || invalid[0];
-                    } else if (invalid.length > 1) {
-                        message = 'Form contains invalid fields';
-                    }
-
-                    new Alert({
-                        message: message,
-                        type: 'danger',
-                        timeout: true
-                    }).open();
-
-                    // Highlight and focus invalid fields
-                    var focused = false;
-                    invalid.forEach(function(param) {
-                        var input = inputMap[param];
-                        if (input) {
-                            input.group.classList.add('has-error');
-                            if (!focused) {
-                                input.elem.focus();
-                                focused = true;
+                        invalid.forEach(function (param) {
+                            var input = inputMap[param];
+                            if (input) {
+                                input.group.classList.add('has-error');
                             }
-                        }
-                    });
+                        });
+                    }
                 });
         },
         parent: form

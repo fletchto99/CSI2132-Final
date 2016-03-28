@@ -77,10 +77,7 @@ app.module(function(E, ajax) {
                     param: 'password',
                     label: 'Password',
                     type: 'password'
-                }, {
-                    param: 'name',
-                    label: 'Name'
-                }, {
+                },{
                     param: 'email',
                     label: 'Email'
                 }],
