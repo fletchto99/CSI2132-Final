@@ -3,7 +3,7 @@
 app.module(function(E, ajax) {
     return {
 
-        navbarVisible: true,
+        navbarVisible: false,
 
         css: [
             'resources/css/modules/welcome.css'

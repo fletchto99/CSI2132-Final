@@ -51,8 +51,8 @@ var app = (function(window, document, E, ajax) {
             E('li', {
                 className: 'active',
                 children: [E('a', {
-                    href: '#dashboard',
-                    textContent: 'Dashboard'
+                    href: '#portal',
+                    textContent: 'Portal'
                 })],
                 parent: nav
             });
@@ -190,24 +190,24 @@ var app = (function(window, document, E, ajax) {
         var display = function() {
             module.display(moduleContainer);
             var anim;
-            if (module.navbarVisible) {
+            if (module.navbarVisible && navbarContainer.style.opacity == 0) {
                 anim = navbarContainer.animate([
                     {opacity: 0},
                     {opacity: 1}
                 ], 150);
-                anim.onfinish = function() {
+                anim.onfinish = function () {
                     navbarContainer.style.opacity = 1;
-                };
-            } else {
+                }
+            } else if(navbarContainer.style.opacity == 1) {
                 anim = navbarContainer.animate([
                     {opacity: 1},
                     {opacity: 0}
                 ], 150);
-                anim.onfinish = function() {
+                anim.onfinish = function () {
                     navbarContainer.style.opacity = 0;
-                };
-
+                }
             }
+
             moduleContainer.animate([
                 {opacity: 0},
                 {opacity: 1}

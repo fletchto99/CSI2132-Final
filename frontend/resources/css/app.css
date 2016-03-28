@@ -29,5 +29,5 @@ button.close {
 }
 
 .navbar-container {
-    display: none;
+    opacity: 0;
 }
