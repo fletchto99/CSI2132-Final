@@ -2,7 +2,8 @@
 
 window.ajax = (function () {
     var ajax = {
-        onerror: null
+        onerror: null,
+        ontimeout: null
     };
 
     function request(method, url, params) {
@@ -30,6 +31,16 @@ window.ajax = (function () {
                 }
             });
 
+            xhr.ontimeout = function () {
+                if (ajax.ontimeout) {
+                    ajax.ontimeout();
+                } else {
+                    reject({reason: 'timeout'})
+                }
+            };
+
+
+            xhr.timeout = 3000;
             xhr.open(method, 'api/' + url);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(params));

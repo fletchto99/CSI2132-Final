@@ -110,6 +110,15 @@ var app = (function(window, document, E, ajax) {
                 reject(response);
             }
         };
+        
+        ajax.ontimeout = function() {
+            app.load('welcome');
+            new Alert({
+                message: 'The server is not responding. Please try again later!',
+                type: 'danger',
+                timeout: false
+            }).open();
+        };
 
         // Authenticate the user, otherwise redirect to login module
         ajax.post('login').then(function(user) {
