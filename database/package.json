@@ -1,0 +1,15 @@
+{
+  "name": "populate-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "populate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.69.0",
+    "simple-rate-limiter": "^0.2.3"
+  }
+}
