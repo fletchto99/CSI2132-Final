@@ -1,4 +1,5 @@
 var postgres = require('pg');
+var Promise = require('promise');
 
 var state = {
     connection: null

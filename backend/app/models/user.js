@@ -1,6 +1,7 @@
 var database = require('../database');
 var validator = require('../helpers/validator');
 var security = require('../helpers/security');
+var Promise = require('promise');
 
 module.exports = {
     register: function(params) {
