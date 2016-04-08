@@ -1,11 +1,9 @@
 var request = require("simple-rate-limiter")(require('request')).to(20).per(10000);
 var Promise = require('promise');
 var fs = require('fs');
+var config = require('./config.json');
 
-const API_KEY = require('./config.json').API_KEY;
-const NUM_PAGES = 1; //20 movies per page, so 10 will retrieve 200 movies
-
-getMovieIDs(NUM_PAGES).then(function(results) {
+getMovieIDs(config.NUM_PAGES).then(function(results) {
     console.log(results.length + " movies loaded for processing!");
     return buildMovieRelations(results);
 }, function(error) {
@@ -35,7 +33,7 @@ function buildScript(script, mappings) {
     //Movies
     content += "INSERT INTO Movies(ID, Title, Poster, Description, Release_Date, IMDB_ID) VALUES\n";
     mappings.movies.forEach(function (movie) {
-        content += "(" + movie.id + ", '" + movie.title.replace(new RegExp("'", 'g'), "\\'") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "\\'") + "', " + movie.release_date + ", " + movie.imdb_id +"),\n"
+        content += "(" + movie.id + ", '" + movie.title.replace(new RegExp("'", 'g'), "\\'") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "\\'") + "', " + movie.release_date + ", '" + movie.imdb_id +"'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -196,7 +194,7 @@ function remapIDs(mappings) {
 function fetchMovieTopics(mappings) {
     return new Promise(function(resolve, reject) {
         request({
-            url: 'http://api.themoviedb.org/3/genre/movie/list?api_key=' + API_KEY,
+            url: 'http://api.themoviedb.org/3/genre/movie/list?api_key=' + config.API_KEY,
             json: true
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
@@ -218,11 +216,11 @@ function fetchActorData(mappings) {
     mappings.actors.forEach(function(actor, index) {
         promises.push(new Promise(function (resolve, reject) {
             request({
-                url: 'http://api.themoviedb.org/3/person/' + actor.id + '?api_key=' + API_KEY,
+                url: 'http://api.themoviedb.org/3/person/' + actor.id + '?api_key=' + config.API_KEY,
                 json: true
             }, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
-                    console.log("Done processing actor: " + index);
+                    console.log("Done processing actor: " + index + " of " + mappings.actors.length);
                     resolve({
                         actor_id: body.id,
                         dob: body.birthday
@@ -249,11 +247,11 @@ function buildMovieRelations(movieIDs) {
     movieIDs.forEach(function (movieID, index) {
         promises.push(new Promise(function (resolve, reject) {
             request({
-                url: 'http://api.themoviedb.org/3/movie/'+movieID+'?api_key='+API_KEY+'&append_to_response=credits',
+                url: 'http://api.themoviedb.org/3/movie/'+movieID+'?api_key='+config.API_KEY+'&append_to_response=credits',
                 json: true
             }, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
-                    console.log("Done processing movie: " + index);
+                    console.log("Done processing movie: " + index + " of " + movieIDs.length);
                     resolve({
                         movie_details: {
                             id: body.id,
@@ -375,11 +373,11 @@ function getMovieIDs(numPages) {
         (function(page) {
             promises.push(new Promise(function (resolve, reject) {
                 request({
-                    url: 'http://api.themoviedb.org/3/discover/movie?api_key='+API_KEY+'&sort_by=vote_average.desc&vote_count.gte=100&page=' + page,
+                    url: 'http://api.themoviedb.org/3/discover/movie?api_key='+config.API_KEY+'&sort_by=vote_average.desc&vote_count.gte='+config.LOWER_LIMIT+'&page=' + page,
                     json: true
                 }, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
-                        console.log("Done processing page: " + page);
+                        console.log("Done processing page: " + page + " of " + config.NUM_PAGES);
                         resolve(body.results.map(function(movie) {
                             return movie.id;
                         }));
