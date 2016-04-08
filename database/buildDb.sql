@@ -1,6 +1,11 @@
-DROP TABLE IF EXISTS Account;
-DROP TABLE IF EXISTS Profile;
-DROP TABLE IF EXISTS Topic;
+DO $$ DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
+        EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+    END LOOP;
+END $$;
+
 DROP DOMAIN IF EXISTS GENDER;
 DROP DOMAIN IF EXISTS RATING;
 
@@ -12,23 +17,22 @@ CREATE DOMAIN RATING as DECIMAL(3,1) CHECK(
   VALUE <= 10 AND VALUE >= 0
 );
 
-
-CREATE TABLE Account (
-  Account_ID SERIAL NOT NULL PRIMARY KEY,
-  Password VARCHAR(60) NOT NULL,
-  Username VARCHAR(32) NOT NULL,
-  Email VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE Profile (
   Profile_ID SERIAL NOT NULL PRIMARY KEY,
-  Account_ID INT NOT NULL REFERENCES Account(Account_ID),
   First_Name VARCHAR(32),
   Last_Name VARCHAR(32),
   DOB DATE,
   Gender GENDER,
   Occupation VARCHAR(64),
   Device_Used VARCHAR(64)
+);
+
+CREATE TABLE Account (
+  Account_ID SERIAL NOT NULL PRIMARY KEY,
+  Password VARCHAR(60) NOT NULL,
+  Username VARCHAR(32) NOT NULL,
+  Email VARCHAR(255) NOT NULL,
+  Profile_ID INT NOT NULL REFERENCES Profile(Profile_ID)
 );
 
 CREATE TABLE Movie (
@@ -54,7 +58,7 @@ CREATE TABLE MovieTopic (
 
 CREATE TABLE Actor (
   Actor_ID SERIAL NOT NULL PRIMARY KEY,
-  Name VARCHAR(128) NOT NULL PRIMARY KEY,
+  Name VARCHAR(128) NOT NULL,
   DOB DATE NULL
 );
 
@@ -62,12 +66,12 @@ CREATE TABLE MovieActor (
   Movie_ID INT NOT NULL REFERENCES Movie(Movie_ID),
   Actor_ID INT NOT NULL REFERENCES Actor(Actor_ID),
   Role_Name VARCHAR(64) NOT NULL,
-  CONSTRAINT pk_Movie_Actor PRIMARY KEY (Movie_ID, Actor_ID)
+  CONSTRAINT pk_Movie_Actor PRIMARY KEY (Movie_ID, Actor_ID, Role_Name)
 );
 
 CREATE TABLE Director (
   Director_ID SERIAL NOT NULL PRIMARY KEY,
-  Name VARCHAR(64) NOT NULL PRIMARY KEY
+  Name VARCHAR(64) NOT NULL
 );
 
 CREATE TABLE MovieDirector (
@@ -87,10 +91,10 @@ CREATE TABLE MovieStudio (
   CONSTRAINT pk_Movie_Studio PRIMARY KEY (Movie_ID, Studio_ID)
 );
 
-CREATE TABLE Watches (
+CREATE TABLE ProfileMovie (
   Profile_ID INT NOT NULL REFERENCES Profile(Profile_ID),
   Movie_ID INT NOT NULL REFERENCES Movie(Movie_ID),
-  Date DATE NOT NULL,
-  Rating RATING NOT NULL
-  CONSTRAINT pk_Watches PRIMARY KEY (Profile_ID, Movie_ID)
+  Date DATE DEFAULT NULL,
+  Rating RATING NOT NULL,
+  CONSTRAINT pk_Profile_Movie PRIMARY KEY (Profile_ID, Movie_ID)
 );
