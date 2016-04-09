@@ -27,7 +27,7 @@ module.exports = {
                 text: "SELECT COUNT(*) as count FROM Account WHERE username = $1",
                 values: [params.username]
             }).then(function (results) {
-                console.log('here');
+
                 if (results.rows[0].count > 0) {
                     reject({
                         error: 'Username already taken!'
@@ -98,9 +98,9 @@ module.exports = {
                     });
                 }
 
-                if (security.verifyPassword(params.password, results[0].password)) {
-                    delete results[0].password;
-                    resolve(results[0]);
+                if (security.verifyPassword(params.password, results.rows[0].password)) {
+                    delete results.rows[0].password;
+                    resolve(results.rows[0]);
                 } else {
                     reject({
                         error: 'Invalid username or password!'

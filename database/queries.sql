@@ -6,7 +6,7 @@
 SELECT Title, Date_Released, Description, Poster, Rating 
 	FROM Movie 
 	WHERE Title 
-	LIKE 'var';
+	ILIKE '%var%'; -- Case insensitive
 
 -- Display the full list of actors, and their roles, of a specific movie. That is, the user should select
 -- the name of the movie from a list, and all the details of the actors, together with their roles,
