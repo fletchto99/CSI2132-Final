@@ -5,3 +5,4 @@ backend/config/database.json
 backend/config/session.json
 backend/sessions
 database/node_modules
+database/populate/node_modules

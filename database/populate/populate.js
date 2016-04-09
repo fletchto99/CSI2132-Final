@@ -31,16 +31,16 @@ function buildScript(script, mappings) {
     var content = "";
 
     //Movies
-    content += "INSERT INTO Movies(ID, Title, Poster, Description, Release_Date, IMDB_ID) VALUES\n";
+    content += "INSERT INTO Movie(Movie_ID, Title, Poster, Description, Release_Date, IMDB_ID) VALUES\n";
     mappings.movies.forEach(function (movie) {
-        content += "(" + movie.id + ", '" + movie.title.replace(new RegExp("'", 'g'), "\\'") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "\\'") + "', " + movie.release_date + ", '" + movie.imdb_id +"'),\n"
+        content += "(" + movie.id + ", '" + movie.title.replace(new RegExp("'", 'g'), "''") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "''") + "', to_date('" + movie.release_date + "', 'YYYY-MM-DD'), '" + movie.imdb_id +"'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Directors
-    content += "INSERT INTO Directors(ID, Name) VALUES\n";
+    content += "INSERT INTO Director(Director_ID, Name) VALUES\n";
     mappings.directors.forEach(function (director) {
-        content += "(" + director.id + ", '" + director.name.replace(new RegExp("'", 'g'), "\\'") + "'),\n"
+        content += "(" + director.id + ", '" + director.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -52,37 +52,37 @@ function buildScript(script, mappings) {
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Actors
-    content += "INSERT INTO Actors(ID, Name, DOB) VALUES\n";
+    content += "INSERT INTO Actor(Actor_ID, Name, DOB) VALUES\n";
     mappings.actors.forEach(function (actor) {
-        content += "(" + actor.id + ", '" + actor.name.replace(new RegExp("'", 'g'), "\\'") + "', " + actor.dob +"),\n"
+        content += "(" + actor.id + ", '" + actor.name.replace(new RegExp("'", 'g'), "''") + "', " + (actor.dob == null ? actor.dob : "to_date('" + actor.dob + "', 'YYYY-MM-DD')") +"),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //acts in
     content += "INSERT INTO MovieActor(Movie_ID, Actor_ID, Role_Name) VALUES\n";
     mappings.acts_in.forEach(function (actor) {
-        content += "(" + actor.movie_id + ", " + actor.actor_id + ", '" + actor.role_name.replace(new RegExp("'", 'g'), "\\'") + "'),\n"
+        content += "(" + actor.movie_id + ", " + actor.actor_id + ", '" + actor.role_name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Topics
-    content += "INSERT INTO Topics(ID, Name) VALUES\n";
+    content += "INSERT INTO Topic(Topic_ID, Name) VALUES\n";
     mappings.topics.forEach(function (topic) {
-        content += "(" + topic.id + ", '" + topic.name.replace(new RegExp("'", 'g'), "\\'") + "'),\n"
+        content += "(" + topic.id + ", '" + topic.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //movie topics
-    content += "INSERT INTO MovieTopics(Movie_ID, Topic_ID) VALUES\n";
+    content += "INSERT INTO MovieTopic(Movie_ID, Topic_ID) VALUES\n";
     mappings.movie_topics.forEach(function (mt) {
         content += "(" + mt.movie_id + ", " + mt.topic_id + "),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Studios
-    content += "INSERT INTO Studio(ID, Name) VALUES\n";
+    content += "INSERT INTO Studio(Studio_ID, Name) VALUES\n";
     mappings.studios.forEach(function (studio) {
-        content += "(" + studio.id + ", '" + studio.name.replace(new RegExp("'", 'g'), "\\'") + "'),\n"
+        content += "(" + studio.id + ", '" + studio.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -223,7 +223,7 @@ function fetchActorData(mappings) {
                     console.log("Done processing actor: " + index + " of " + mappings.actors.length);
                     resolve({
                         actor_id: body.id,
-                        dob: body.birthday
+                        dob: body.birthday || null
                     })
                 } else {
                     reject({
