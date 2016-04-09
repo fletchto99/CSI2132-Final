@@ -3,19 +3,20 @@ var tmdb = require('./tmdbAPI');
 var config = require('./config.json');
 
 
-
-tmdb.getMovieIDs(config.NUM_PAGES).then(function(results) {
-    console.log(results.length + " movies loaded for processing!");
-    return tmdb.buildMovieRelations(results);
-}).then(function (mappings) {
-    return tmdb.fetchMovieTopics(mappings);
-}).then(function (mappings) {
-    return tmdb.fetchActorData(mappings);
-}).then(function (mappings) {
-    console.log("Remapping IDs");
-    helpers.remap(mappings);
+var finalizeData = function (mappings) {
     console.log("Building script");
     helpers.buildScript("script.sql", mappings);
-}).catch(function(error) {
+};
+
+var handleError = function(error) {
     console.log(error.error + error.status)
-});
+};
+
+tmdb.getMovieIDs(config.NUM_PAGES)
+    .then(tmdb.buildMovieRelations)
+    .then(tmdb.fetchMovieTopics)
+    .then(tmdb.fetchActorData)
+    .then(helpers.remap)
+    .then(finalizeData)
+    .catch(handleError);
+
