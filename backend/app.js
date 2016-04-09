@@ -11,8 +11,9 @@ database.connect(dbConfig, null).then(function () {
     app.set('trust proxy', 1); //Trust Nginx reverse proxy
     app.use('/api', require('./app/middleware'));
     app.use('/api', require('./app/controllers'));
+
     app.listen(appConfig.port, function () {
-        console.log("Movie DB has started successfully")
+        console.log(appConfig.app_name + " has started successfully")
     });
 }, function () {
     console.log("Error connecting to database!");

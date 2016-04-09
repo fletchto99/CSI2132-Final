@@ -1,5 +1,4 @@
 var express = require('express');
-var developer = require('../../helpers/developer')
 var router = express.Router();
 
 router.post('/', function (request, res) {
@@ -9,12 +8,10 @@ router.post('/', function (request, res) {
                 status: 'Success!'
             })
         } else {
-            var response = {
+            res.jsonError({
                 dev_error: error,
                 status: 'Error logging out!'
-            };
-            developer.prepareDevResponse(response);
-            res.status(500).json(response)
+            }, 500);
         }
 
     });

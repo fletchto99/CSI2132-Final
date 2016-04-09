@@ -8,6 +8,7 @@ var router = express.Router();
 var sessionObj = require('../../config/session.json');
 sessionObj.store = new FileStore;
 
+router.use(require('./error'));
 router.use(bodyParser.json());
 router.use(helmet());
 router.use(session(sessionObj));

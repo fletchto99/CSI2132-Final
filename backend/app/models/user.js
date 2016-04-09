@@ -9,7 +9,9 @@ module.exports = {
             var errors = validator.validate(params, {
                 username: validator.isString,
                 password: validator.isString,
-                email: validator.isEmail
+                email: validator.isEmail,
+                firstname: validator.isString,
+                lastname: validator.isString
             });
 
             if (errors) {
@@ -25,24 +27,34 @@ module.exports = {
                 text: "SELECT COUNT(*) as count FROM Account WHERE username = $1",
                 values: [params.username]
             }).then(function (results) {
-
-                if (results[0].count > 0) {
+                console.log('here');
+                if (results.rows[0].count > 0) {
                     reject({
                         error: 'Username already taken!'
                     });
                     return;
                 }
 
+                return database.query({
+                    text: 'INSERT INTO Profile(First_Name, Last_Name) VALUES ($1, $2) returning Profile_ID',
+                    values: [params.firstname, params.lastname]
+                });
+
+
+            }, function () {
+                reject({
+                    error: 'Error generating profile, please try again later!'
+                });
+            }).then(function(results) {
                 var secure_password = security.hashPassword(params.password);
 
                 return database.query({
-                    text: 'INSERT INTO Account(Username, Password, Email) VALUES ($1, $2, $3)',
-                    values: [params.username, secure_password, params.email]
+                    text: 'INSERT INTO Account(Username, Password, Email, Profile_ID) VALUES ($1, $2, $3, $4)',
+                    values: [params.username, secure_password, params.email, results.rows[0].profile_id]
                 });
             }, function () {
-
                 reject({
-                    error: 'Error checking username, please try again later!'
+                    error: 'Error generating account!'
                 });
             }).then(function() {
                 resolve({
@@ -51,7 +63,8 @@ module.exports = {
                 })
             }, function(error) {
                 reject({
-                    error: 'An unexpected error has occurred! Please try again later.'
+                    error: 'An unexpected error has occurred! Please try again later.',
+                    dev_error: error
                 });
             });
         });
@@ -78,7 +91,7 @@ module.exports = {
                 values: [params.username]
             }).then(function (results) {
 
-                if (results.length < 1) {
+                if (results.rows.length < 1) {
                     //Never tell the user account not found! Can be used to created an index of existing accounts for easy hacking
                     reject({
                         error: 'Invalid username or password!'

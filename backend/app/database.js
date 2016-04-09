@@ -33,7 +33,7 @@ module.exports = {
                 if (error) {
                     reject(error);
                 } else {
-                    resolve(result.rows);
+                    resolve(result);
                 }
             })
         });

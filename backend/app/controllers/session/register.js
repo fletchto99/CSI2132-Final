@@ -12,7 +12,7 @@ router.put('/', function (req, res) {
             req.session.user = result;
             res.json(req.session.user);
         }, function (error) {
-            res.status(400).json(error);
+            res.jsonError(400, error);
         });
     }
 });
