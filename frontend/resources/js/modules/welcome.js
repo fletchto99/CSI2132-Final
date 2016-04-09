@@ -22,7 +22,7 @@ app.module(function(E, ajax) {
 
             E('h2', {
                 className: 'login-title',
-                textContent: 'Movie DB',
+                textContent: app.name,
                 parent: modal
             });
 
@@ -71,6 +71,12 @@ app.module(function(E, ajax) {
                 action: 'register',
                 method: 'put',
                 inputs: [{
+                    param: 'firstname',
+                    label: 'First Name'
+                },{
+                    param: 'lastname',
+                    label: 'Last Name'
+                },{
                     param: 'username',
                     label: 'Username'
                 }, {

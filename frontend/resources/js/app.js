@@ -2,6 +2,8 @@
 
 var app = (function(window, document, E, ajax) {
     var app = {};
+    app.name = 'Watch This Next';
+    app.short_name = 'WTN';
 
     var moduleContainer = null;
     var moduleDefault = 'welcome';
@@ -10,7 +12,7 @@ var app = (function(window, document, E, ajax) {
     var navbarContainer = null;
 
     app.start = function() {
-
+        document.title = app.name;
         document.body.removeChild(document.getElementById('NoJSMessage'));
 
         navbarContainer = E('div', {
@@ -33,7 +35,7 @@ var app = (function(window, document, E, ajax) {
                 className: 'navbar-header',
                 children: [E('div', {
                     className: 'navbar-brand',
-                    textContent: 'Movie DB'
+                    textContent: app.name
                 })],
                 parent: navbar
             });
