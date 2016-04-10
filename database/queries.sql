@@ -35,17 +35,21 @@ SELECT D.Name, S.Name, M.Date_Released
 -- and the studio(s) that s(he) worked with.
 
 
-SELECT COUNT(*) MovieCount FROM MovieActor MA GROUP BY MA.Actor_ID ORDER BY MovieCount DESC
-
-SELECT A.Name, M.Name, MA.Role_Name, D.Name, S.Name 
-	FROM Actor A, Director D, Studio S, Movie M, MovieActor MA, MovieDirector MD, MovieStudio MS
-	WHERE A.Actor_ID = 
-		AND A.Actor_ID = MA.Actor_ID
-		AND M.Movie_ID = MA.Movie_ID
-		AND M.Movie_ID = MD.Movie_ID
-		AND M.Movie_ID = MS.Movie_ID
-		AND D.Director_ID = MD.Director_ID
-		AND S.Studio_ID = MS.Studio_ID
+SELECT a.actor_id, a.name, ma.movie_id, m.title, m.release_date, s.name AS studio_name, d.name AS director_name
+FROM Actor a
+  INNER JOIN movieactor ma ON ma.actor_id = a.actor_id
+  INNER JOIN movie m ON m.movie_id = ma.movie_id
+  INNER JOIN moviestudio ms ON ms.movie_id = m.movie_id
+  INNER JOIN moviedirector md ON md.movie_id = m.movie_id
+  INNER JOIN studio s ON s.studio_id = ms.studio_id
+  INNER JOIN director d ON d.director_id = md.director_id
+WHERE a.Actor_ID = (
+  SELECT MA.actor_id
+  FROM MovieActor MA
+  GROUP BY MA.Actor_ID
+  ORDER BY COUNT(*) DESC
+  LIMIT 1
+)
 
 -- e. Display the information about the two actors that appeared the most often together in the
 -- movies, as contained in your database.
