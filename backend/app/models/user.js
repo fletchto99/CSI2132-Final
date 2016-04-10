@@ -27,7 +27,6 @@ module.exports = {
                 text: "SELECT COUNT(*) as count FROM Account WHERE username = $1",
                 values: [params.username]
             }).then(function (results) {
-
                 if (results.rows[0].count > 0) {
                     reject({
                         error: 'Username already taken!'
@@ -41,11 +40,13 @@ module.exports = {
                 });
 
 
-            }, function () {
+            }, function (error) {
                 reject({
+                    dev_error: error,
                     error: 'Error generating profile, please try again later!'
                 });
             }).then(function(results) {
+
                 var secure_password = security.hashPassword(params.password);
 
                 return database.query({
