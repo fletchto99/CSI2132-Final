@@ -35,10 +35,22 @@ function Modal(params) {
         });
     }
 
-    this.body = E('div', {
-        className: 'modal-body',
-        parent: content
-    });
+
+    if (params.content) {
+        this.body = E('div', {
+            className: 'modal-body',
+            children: [
+                params.content
+            ],
+            parent: content
+        });
+    } else {
+        this.body = E('div', {
+            className: 'modal-body',
+            parent: content
+        });
+    }
+
 
     this.keydown = function(e) {
         var keyCode = e.keyCode;
