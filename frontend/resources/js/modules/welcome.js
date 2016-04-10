@@ -9,7 +9,8 @@ app.module(function(E, ajax) {
             'resources/css/modules/welcome.css'
         ],
 
-        display: function(container) {
+        display: function(container, params) {
+
             var floatingBox = E('div', {
                 className: 'floating-box',
                 parent: container
@@ -52,8 +53,11 @@ app.module(function(E, ajax) {
                         app.user = user;
                         modal.animate([
                             {transform: 'scale(1, 1'},
+                            {transform: 'scale(1.5, 1.5)'},
+                            {transform: 'scale(0.5, 0.5)'},
+                            {transform: 'scale(1.5, 1.5)'},
                             {transform: 'scale(0, 0)'}
-                        ], 150).onfinish = function() {
+                        ], 1500).onfinish = function() {
                             modal.parentElement.removeChild(modal);
                             app.load('portal');
                             new Alert({

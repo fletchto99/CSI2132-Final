@@ -4,16 +4,17 @@ app.module(function(E, ajax) {
     return {
 
         navbarVisible: true,
-        //
-        // css: [
-        //     'resources/css/modules/portal.css'
-        // ],
+        
+        css: [
+            'resources/css/modules/portal.css'
+        ],
 
         preconditions: function() {
             return app.user !== undefined;
         },
 
-        display: function(container) {
+        display: function(container, params) {
+
             ajax.get('auth/whoami').then(function(response) {
                 E('h1', {
                     textContent: "Welcome, " + response.auth,
