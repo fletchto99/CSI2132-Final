@@ -1,3 +1,7 @@
 {
-  "API_KEY": "<TMDB_API_KEY_HERE>"
+  "API_KEY": "<TMDB_API_KEY_HERE>",
+  "NUM_PAGES": 5,
+  "LOWER_LIMIT": 1000,
+  "RATE_LIMIT": 20,
+  "ACTOR_LIMIT": 5
 }

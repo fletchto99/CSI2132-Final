@@ -78,7 +78,9 @@ var buildMovieRelations = function (movieIDs) {
                         },
                         topics: body.genres,
                         studios: body.production_companies,
-                        actors: body.credits.cast.map(function(castmember) {
+                        actors: body.credits.cast.filter(function(actor) {
+                            return actor.order < config.ACTOR_LIMIT;
+                        }).map(function(castmember) {
                             return {
                                 id: castmember.id,
                                 name: castmember.name,
