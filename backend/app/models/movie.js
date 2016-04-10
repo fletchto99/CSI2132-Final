@@ -25,9 +25,10 @@ module.exports = {
             
             database.query({
                 text:
-                    "SELECT Title, Release_Date, Description, Poster " +
-                    "FROM Movie " +
-                    "WHERE Title " +
+                    "SELECT M.Title, M.Release_Date, M.Description, M.Poster, " +
+                        "(SELECT AVG(PM.Rating) FROM ProfileMovie PM WHERE PM.Movie_ID = M.Movie_ID) as Rating " +
+                    "FROM Movie M " +
+                    "WHERE M.Title " +
                     "ILIKE $1",
                 values: ["%" + params.title + "%"]
             }).then(function(results) {
