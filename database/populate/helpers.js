@@ -114,16 +114,16 @@ var buildScript = function (script, mappings) {
     var content = "";
 
     //Movies
-    content += "INSERT INTO Movie(Movie_ID, Title, Poster, Description, Release_Date, IMDB_ID) VALUES\n";
+    content += "INSERT INTO Movie(Title, Poster, Description, Release_Date, IMDB_ID) VALUES\n";
     mappings.movies.forEach(function (movie) {
-        content += "(" + movie.id + ", '" + movie.title.replace(new RegExp("'", 'g'), "''") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "''") + "', to_date('" + movie.release_date + "', 'YYYY-MM-DD'), '" + movie.imdb_id +"'),\n"
+        content += "('" + movie.title.replace(new RegExp("'", 'g'), "''") + "', '" + movie.poster + "', '" + movie.description.replace(new RegExp("'", 'g'), "''") + "', to_date('" + movie.release_date + "', 'YYYY-MM-DD'), '" + movie.imdb_id +"'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Directors
-    content += "INSERT INTO Director(Director_ID, Name) VALUES\n";
+    content += "INSERT INTO Director(Name) VALUES\n";
     mappings.directors.forEach(function (director) {
-        content += "(" + director.id + ", '" + director.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
+        content += "('" + director.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -135,9 +135,9 @@ var buildScript = function (script, mappings) {
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Actors
-    content += "INSERT INTO Actor(Actor_ID, Name, DOB) VALUES\n";
+    content += "INSERT INTO Actor(Name, DOB) VALUES\n";
     mappings.actors.forEach(function (actor) {
-        content += "(" + actor.id + ", '" + actor.name.replace(new RegExp("'", 'g'), "''") + "', " + (actor.dob == null ? actor.dob : "to_date('" + actor.dob + "', 'YYYY-MM-DD')") +"),\n"
+        content += "('" + actor.name.replace(new RegExp("'", 'g'), "''") + "', " + (actor.dob == null ? actor.dob : "to_date('" + actor.dob + "', 'YYYY-MM-DD')") +"),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -149,9 +149,9 @@ var buildScript = function (script, mappings) {
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Topics
-    content += "INSERT INTO Topic(Topic_ID, Name) VALUES\n";
+    content += "INSERT INTO Topic(Name) VALUES\n";
     mappings.topics.forEach(function (topic) {
-        content += "(" + topic.id + ", '" + topic.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
+        content += "('" + topic.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -163,9 +163,9 @@ var buildScript = function (script, mappings) {
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //Studios
-    content += "INSERT INTO Studio(Studio_ID, Name) VALUES\n";
+    content += "INSERT INTO Studio(Name) VALUES\n";
     mappings.studios.forEach(function (studio) {
-        content += "(" + studio.id + ", '" + studio.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
+        content += "('" + studio.name.replace(new RegExp("'", 'g'), "''") + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
@@ -177,9 +177,9 @@ var buildScript = function (script, mappings) {
     content = content.substr(0, content.length - 2) + ";\n\n";
 
     //movie topics
-    content += "INSERT INTO Profile(Profile_ID, First_Name, Last_Name) VALUES\n";
+    content += "INSERT INTO Profile(First_Name, Last_Name) VALUES\n";
     mappings.profiles.forEach(function (profile) {
-        content += "(" + profile.id + ", '" + profile.first_name + "', '" + profile.last_name + "'),\n"
+        content += "('" + profile.first_name + "', '" + profile.last_name + "'),\n"
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
