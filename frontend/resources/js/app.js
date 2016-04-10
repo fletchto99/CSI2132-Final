@@ -72,10 +72,8 @@ var app = (function(window, document, E, ajax) {
                 className: 'form-control',
                 placeholder: 'Movie Name',
                 parent: controls,
-                onkeypress: function(e) {
-                    if(e.which == 13) {
-                        loadMovie();
-                    }
+                onkeypress: function (e) {
+                    e.which == 13 && loadMovie()
                 }
             });
 
@@ -83,10 +81,10 @@ var app = (function(window, document, E, ajax) {
                 if (search.value.length < 1) {
                     new Alert({
                         message: 'Please enter a movie to search for!',
-                        type: 'warning'
+                        type: 'warning',
+                        timeout: true
                     }).open();
                 } else {
-                    console.log(search.value.length);
                     app.load('movies', {
                        query: search.value
                     });
@@ -99,17 +97,11 @@ var app = (function(window, document, E, ajax) {
                 parent: collapse
             });
 
-            var form = E('form', {
+            var form = E('div', {
                 className: 'navbar-form',
                 children:[
-                    E('div', {
-                        className: 'form-group',
-                        children: [
-                            search
-                        ]
-                    }),
+                    search,
                     E('button', {
-                        type: 'search',
                         textContent: 'Find a Movie',
                         className: 'btn btn-default',
                         onclick: loadMovie
@@ -143,17 +135,9 @@ var app = (function(window, document, E, ajax) {
         var hashchange = function() {
             var hash = window.location.hash.substring(1);
             var parameters = hash.split('/');
-
-            // Hex decode any parameters
-            var len = parameters.length;
-            for (var i = 0; i < len; i++) {
-                parameters[i] = decodeURIComponent(parameters[i]);
-            }
-
             var id = parameters[0];
-
             if (parameters[1]) {
-                app.load(id, JSON.parse(window.atob(parameters[1])));
+                app.load(id, JSON.parse(window.atob(decodeURIComponent(parameters[1]))));
             } else {
                 app.load(id);
             }
@@ -191,25 +175,16 @@ var app = (function(window, document, E, ajax) {
             }).open();
         };
 
-        var hash = window.location.hash.substring(1);
+
 
         var moduleToLoad = null;
         var paramsToLoad = null;
 
+        var hash = window.location.hash.substring(1);
         if (hash.length > 0) {
-
             var parameters = hash.split('/');
-
-            // Hex decode any parameters
-            var len = parameters.length;
-            for (var i = 0; i < len; i++) {
-                parameters[i] = decodeURIComponent(parameters[i]);
-            }
-
-            console.log(moduleToLoad);
-
             moduleToLoad =  parameters[0];
-            paramsToLoad = parameters[1] ? JSON.parse(window.atob(parameters[1])) : null;
+            paramsToLoad = parameters[1] ? JSON.parse(window.atob(decodeURIComponent(parameters[1]))) : null;
         }
 
         // Authenticate the user, otherwise redirect to login module
@@ -226,6 +201,7 @@ var app = (function(window, document, E, ajax) {
     };
 
     app.load = function(id, params) {
+
         if (!id) id = moduleDefault;
 
         var load = function(params) {
