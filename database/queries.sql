@@ -54,3 +54,10 @@ WHERE a.Actor_ID = (
 -- e. Display the information about the two actors that appeared the most often together in the
 -- movies, as contained in your database.
 
+SELECT ma1.actor_id as aid1, a1.name, ma2.actor_id as aid2, a2.name, count(DISTINCT ma1.movie_id) as together
+FROM movieactor ma1
+  INNER JOIN movieactor ma2 on ma1.movie_id = ma2.movie_id AND ma1.actor_id < ma2.actor_id
+  INNER JOIN actor a1 on ma1.actor_id = a1.actor_id
+  INNER JOIN actor a2 on ma2.actor_id = a2.actor_id  
+GROUP BY ma1.actor_id, ma2.actor_id, a1.name, a2.name
+ORDER BY together DESC)
