@@ -3,7 +3,7 @@
 -- name of the movie from a list, and the information as contained in the movie table should then
 -- be displayed on the screen.
 
-SELECT Title, Date_Released, Description, Poster, Rating 
+SELECT Title, Release_Date, Description, Poster 
 	FROM Movie 
 	WHERE Title 
 	ILIKE '%var%'; -- Case insensitive
@@ -34,7 +34,8 @@ SELECT D.Name, S.Name, M.Date_Released
 -- contained in your database. Display this information together with the details of the director(s)
 -- and the studio(s) that s(he) worked with.
 
-SELECT COUNT(*) FROM MovieActor MA WHERE MA.Actor_ID = ()
+
+SELECT COUNT(*) MovieCount FROM MovieActor MA GROUP BY MA.Actor_ID ORDER BY MovieCount DESC
 
 SELECT A.Name, M.Name, MA.Role_Name, D.Name, S.Name 
 	FROM Actor A, Director D, Studio S, Movie M, MovieActor MA, MovieDirector MD, MovieStudio MS
