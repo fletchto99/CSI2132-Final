@@ -31,5 +31,12 @@ module.exports = {
         if(typeof(value) !== 'string' || value.length == 0 ||  !(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.exec(value))) {
             return 'Expected an email address'
         }
+    },
+
+    isDefined: function (value) {
+        if(value !== undefined) {
+            return
+        }
+        return 'Expected a value'
     }
 };

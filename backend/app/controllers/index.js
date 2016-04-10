@@ -16,5 +16,6 @@ router.use('/register', require('./session/register'));
  * Authenticated api endpoints
  */
 router.use('/auth/whoami', require('./authenticated/whoami'));
+router.use('/auth/find_movies', require('./authenticated/find_movies'));
 
 module.exports = router;
