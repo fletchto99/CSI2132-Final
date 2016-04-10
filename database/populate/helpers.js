@@ -176,6 +176,20 @@ var buildScript = function (script, mappings) {
     });
     content = content.substr(0, content.length - 2) + ";\n\n";
 
+    //movie topics
+    content += "INSERT INTO Profile(Profile_ID, First_Name, Last_Name) VALUES\n";
+    mappings.profiles.forEach(function (profile) {
+        content += "(" + profile.id + ", '" + profile.first_name + "', '" + profile.last_name + "'),\n"
+    });
+    content = content.substr(0, content.length - 2) + ";\n\n";
+
+    //movie topics
+    content += "INSERT INTO ProfileMovie(Profile_ID, Movie_ID, Rating) VALUES\n";
+    mappings.ratings.forEach(function (rating) {
+        content += "(" + rating.profile_id + ", " + rating.movie_id + ", " + rating.rating + "),\n"
+    });
+    content = content.substr(0, content.length - 2) + ";\n\n";
+
     fs.writeFile(script, content, function (err) {
         if (err) {
             return console.log(err);
@@ -184,8 +198,41 @@ var buildScript = function (script, mappings) {
     });
 };
 
+
+var buildProfiles = function(mappings) {
+
+    return new Promise(function (resolve, reject) {
+        var profiles = [];
+
+        for (var i = 0; i < 100; i++) {
+            profiles.push({
+                id: i + 1,
+                first_name: 'Dummy',
+                last_name: 'user'
+            });
+        }
+
+        var ratings = [];
+
+        mappings.movies.forEach(function(movie) {
+            profiles.forEach(function(profile) {
+                ratings.push({
+                    profile_id: profile.id,
+                    movie_id: movie.id,
+                    rating: Math.floor((Math.random() * 10) + 1)
+                })
+            });
+        });
+
+        mappings.profiles = profiles;
+        mappings.ratings = ratings;
+        resolve(mappings)
+    });
+};
+
 module.exports = {
     lookup: lookup,
     remap: remap,
-    buildScript: buildScript
+    buildScript: buildScript,
+    buildProfiles: buildProfiles
 };

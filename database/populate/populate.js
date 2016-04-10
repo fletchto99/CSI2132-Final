@@ -17,6 +17,7 @@ tmdb.getMovieIDs(config.NUM_PAGES)
     .then(tmdb.fetchMovieTopics)
     .then(tmdb.fetchActorData)
     .then(helpers.remap)
+    .then(helpers.buildProfiles)
     .then(finalizeData)
     .catch(handleError);
 

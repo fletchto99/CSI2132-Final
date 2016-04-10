@@ -94,6 +94,6 @@ CREATE TABLE ProfileMovie (
   Profile_ID INT NOT NULL REFERENCES Profile(Profile_ID),
   Movie_ID INT NOT NULL REFERENCES Movie(Movie_ID),
   Date DATE DEFAULT NULL,
-  Rating RATING NOT NULL,
+  Rating RATING DEFAULT NULL,
   CONSTRAINT pk_Profile_Movie PRIMARY KEY (Profile_ID, Movie_ID)
 );
