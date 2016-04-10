@@ -35,7 +35,10 @@ var app = (function(window, document, E, ajax) {
                 className: 'navbar-header',
                 children: [E('div', {
                     className: 'navbar-brand',
-                    textContent: app.name
+                    textContent: app.name,
+                    onclick: function() {
+                        app.load('portal');
+                    }
                 })],
                 parent: navbar
             });
@@ -50,18 +53,69 @@ var app = (function(window, document, E, ajax) {
                 parent: collapse
             });
 
-            E('li', {
-                className: 'active',
-                children: [E('a', {
-                    href: '#portal',
-                    textContent: 'Portal'
-                })],
-                parent: nav
-            });
+            // E('li', {
+            //     className: 'active',
+            //     children: [E('a', {
+            //         href: '#portal',
+            //         textContent: 'Portal'
+            //     })],
+            //     parent: nav
+            // });
 
             var controls = E('ul', {
                 className: 'nav navbar-nav navbar-right',
                 parent: collapse
+            });
+
+            var search = E('input', {
+                type: 'text',
+                className: 'form-control',
+                placeholder: 'Movie Name',
+                parent: controls,
+                onkeypress: function(e) {
+                    if(e.which == 13) {
+                        loadMovie();
+                    }
+                }
+            });
+
+            var loadMovie = function() {
+                if (search.value.length < 1) {
+                    new Alert({
+                        message: 'Please enter a movie to search for!',
+                        type: 'warning'
+                    }).open();
+                } else {
+                    console.log(search.value.length);
+                    app.load('movies', {
+                       query: search.value
+                    });
+                    search.value = "";
+                }
+            };
+
+            var searchContainer = E('div', {
+                className: 'search-bar',
+                parent: collapse
+            });
+
+            var form = E('form', {
+                className: 'navbar-form',
+                children:[
+                    E('div', {
+                        className: 'form-group',
+                        children: [
+                            search
+                        ]
+                    }),
+                    E('button', {
+                        type: 'search',
+                        textContent: 'Find a Movie',
+                        className: 'btn btn-default',
+                        onclick: loadMovie
+                    })
+                ],
+                parent: searchContainer
             });
 
             E('li', {
@@ -87,8 +141,23 @@ var app = (function(window, document, E, ajax) {
 
         // Handle hash changes
         var hashchange = function() {
-            var id = window.location.hash.slice(1);
-            app.load(id);
+            var hash = window.location.hash.substring(1);
+            var parameters = hash.split('/');
+
+            // Hex decode any parameters
+            var len = parameters.length;
+            for (var i = 0; i < len; i++) {
+                parameters[i] = decodeURIComponent(parameters[i]);
+            }
+
+            var id = parameters[0];
+
+            if (parameters[1]) {
+                app.load(id, JSON.parse(window.atob(parameters[1])));
+            } else {
+                app.load(id);
+            }
+
         };
 
         window.addEventListener('hashchange', hashchange, false);
@@ -122,10 +191,31 @@ var app = (function(window, document, E, ajax) {
             }).open();
         };
 
+        var hash = window.location.hash.substring(1);
+
+        var moduleToLoad = null;
+        var paramsToLoad = null;
+
+        if (hash.length > 0) {
+
+            var parameters = hash.split('/');
+
+            // Hex decode any parameters
+            var len = parameters.length;
+            for (var i = 0; i < len; i++) {
+                parameters[i] = decodeURIComponent(parameters[i]);
+            }
+
+            console.log(moduleToLoad);
+
+            moduleToLoad =  parameters[0];
+            paramsToLoad = parameters[1] ? JSON.parse(window.atob(parameters[1])) : null;
+        }
+
         // Authenticate the user, otherwise redirect to login module
         ajax.post('login').then(function(user) {
             app.user = user;
-            app.load('portal');
+            app.load(moduleToLoad || 'portal', paramsToLoad);
             new Alert({
                 message: 'Welcome, ' + app.user.username,
                 timeout: true
@@ -135,16 +225,19 @@ var app = (function(window, document, E, ajax) {
         });
     };
 
-    app.load = function(id) {
+    app.load = function(id, params) {
         if (!id) id = moduleDefault;
 
-        var load = function() {
+        var load = function(params) {
             lastModule = currentModule;
             currentModule = {
                 id: id,
                 obj: null,
-                css: []
+                css: [],
+                params: params || null
             };
+
+            var encodedParams = params != null ?  encodeURIComponent(window.btoa(JSON.stringify(params))) : "";
 
             if (lastModule) {
                 // Cleanup last module
@@ -153,9 +246,9 @@ var app = (function(window, document, E, ajax) {
                     document.head.removeChild(css);
                 });
 
-                history.pushState(null, null, '#' + id);
+                history.pushState(null, null, '#' + id + "/" + encodedParams);
             } else {
-                history.replaceState(null, null, '#' + id);
+                history.replaceState(null, null, '#' + id + "/" + encodedParams);
             }
 
             var script = E('script', {
@@ -188,10 +281,10 @@ var app = (function(window, document, E, ajax) {
                 {opacity: 1},
                 {opacity: 0}
             ], 150).onfinish = function() {
-                load();
+                load(params);
             };
         } else {
-            load();
+            load(params);
         }
     };
 
@@ -203,7 +296,7 @@ var app = (function(window, document, E, ajax) {
         var module = register(E, ajax);
 
         var display = function() {
-            module.display(moduleContainer);
+            module.display(moduleContainer, currentModule.params);
             var anim;
             if (module.navbarVisible && navbarContainer.style.opacity == 0) {
                 anim = navbarContainer.animate([
@@ -213,7 +306,7 @@ var app = (function(window, document, E, ajax) {
                 anim.onfinish = function () {
                     navbarContainer.style.opacity = 1;
                 }
-            } else if(navbarContainer.style.opacity == 1) {
+            } else if(!module.navbarVisible && navbarContainer.style.opacity == 1) {
                 anim = navbarContainer.animate([
                     {opacity: 1},
                     {opacity: 0}

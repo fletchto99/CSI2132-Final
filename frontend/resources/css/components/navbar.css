@@ -5,3 +5,7 @@
 .navbar {
     border-radius: 0;
 }
+
+.form-control {
+    margin: 0 10px;
+}
