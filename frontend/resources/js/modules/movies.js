@@ -54,7 +54,7 @@ app.module(function(E, ajax) {
                     }
 
                     posters.push(E('div', {
-                        className: 'col-md-2 movie-poster',
+                        className: 'col-xs-4 col-sm-2 col-md-2 col-lg-2 movie-poster',
                         children: [
                             E('img', {
                                 className: 'img-responsive',
