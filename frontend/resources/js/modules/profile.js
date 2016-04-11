@@ -17,6 +17,8 @@ app.module(function(E, ajax) {
         
             ajax.get('auth/profile').then(function(response) {
 
+                response.profile.dob = response.profile.dob == null ? null : response.profile.dob.split("T")[0];
+
                 var profileForm = E('div', {
                     className: 'col-xs-8 col-sm-4 col-lg-4',
                     children: [
@@ -62,7 +64,7 @@ app.module(function(E, ajax) {
                                     new Alert({
                                         message: 'Settings saved!',
                                         timeout: true
-                                    })
+                                    }).open();
                                 }
                             }
                         })
