@@ -243,7 +243,7 @@ WHERE TMP.AvgRating > ((SELECT AVG(PM2.Rating) AS GlobalAverage
 SELECT
   M.Title,
   PM.Rating,
--- not implemented yet  PM.Comment,
+  PM.Comments,
   P.First_Name,
   P.Last_Name,
   P.Dob,
@@ -252,7 +252,7 @@ SELECT
 FROM Profile P
 INNER JOIN ProfileMovie PM ON PM.Profile_ID = P.Profile_ID
 INNER JOIN Movie M ON PM.Movie_ID = M.Movie_ID
-WHERE M.Title ILIKE='Interstellar'
+WHERE M.Movie_ID = 1;
 
 -- o. Find the names and emails of all users who gave ratings that are lower than that of a 
 -- rater with a name called John Smith. (Note that there may be more than one rater with this name).
