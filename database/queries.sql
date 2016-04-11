@@ -215,3 +215,22 @@ ORDER BY Rating DESC;
 -- m. Find the names, join‐date and profiling information (age‐range, gender, and so on) of 
 -- the users that give the highest overall ratings. Display this information together with 
 -- the names of the movies and the dates the ratings were done.
+
+SELECT
+  TMP.AvgRating,
+  P.First_Name,
+  P.Last_Name,
+  P.Dob,
+  P.Occupation,
+  P.Gender
+FROM
+  (SELECT
+     AVG(PM.Rating) AS AvgRating,
+     PM.Profile_ID
+   FROM ProfileMovie PM
+   GROUP BY PM.Profile_ID) AS TMP
+INNER JOIN Profile P ON P.Profile_ID = TMP.Profile_ID
+WHERE TMP.AvgRating > ((SELECT AVG(PM2.Rating) AS GlobalAverage
+                        FROM ProfileMovie PM2)
+                       + (0.10) * (SELECT STDDEV(PM1.Rating) AS GlobalDeviation
+                                   FROM ProfileMovie PM1))
