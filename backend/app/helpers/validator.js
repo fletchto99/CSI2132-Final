@@ -17,8 +17,9 @@ module.exports = {
 
     isInteger: function (value) {
         if (typeof(value) === 'number' && isFinite(value) && Math.floor(value) === value) {
-            return 'Expected an integer';
+            return;
         }
+        return 'Expected an integer';
     },
 
     isString: function (value) {
