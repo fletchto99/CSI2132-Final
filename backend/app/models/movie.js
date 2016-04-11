@@ -137,5 +137,42 @@ module.exports = {
                 })
             });  
         });
+    },
+
+    recommendMovies: function (params) {
+        return new Promise(function(resolve, reject) {
+
+            var errors = validator.validate(params, {
+                profile_id: validator.isInteger
+            });
+
+            if (errors) {
+                reject({
+                    error: true,
+                    type: 'validation',
+                    rejected_parameters: errors
+                });
+                return;
+            }
+
+            database.query({
+                text:
+                "SELECT " +
+                        "M.Movie_ID, M.Title, M.Release_Date, M.Description, M.Poster, " +
+                    "(SELECT AVG(PM.Rating) as Rating " +
+                "FROM ProfileMovie PM " +
+                "WHERE PM.Movie_ID = M.Movie_ID) AS Rating " +
+                "FROM Movie M " +
+                "ORDER BY Rating DESC " +
+                "LIMIT 12;"
+            }).then(function(results) {
+                resolve(results.rows)
+            }, function(error) {
+                reject({
+                    error: "Error looking up movie",
+                    dev_error: error
+                })
+            });
+        });
     }
 };

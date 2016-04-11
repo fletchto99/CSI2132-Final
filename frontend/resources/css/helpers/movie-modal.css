@@ -1,0 +1,12 @@
+.rating-star {
+    font-size: 24px;
+    margin: 2px 2px;
+}
+
+.rating-star-avg {
+    color: #ffc547;
+}
+
+.rating-star-mine {
+    color: #024089;
+}

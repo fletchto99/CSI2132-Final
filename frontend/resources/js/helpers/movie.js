@@ -13,24 +13,24 @@ var movie = (function() {
             for (var i = 0; i < 10; i++) {
                 (function(position) {
                     var current = E('i', {
-                        className: 'fa ' + (rating.rating == null ? ' rating-star ' : ' rating-star-mine ') + (position+1 <= (rating.rating || Math.round(movie.rating)) ? 'fa-star' : 'fa-star-o'),
+                        className: 'fa rating-star ' + (rating.rating == null ? ' rating-star-avg ' : ' rating-star-mine ') + (position+1 <= (rating.rating || Math.round(movie.rating)) ? 'fa-star' : 'fa-star-o'),
                         parent: ratingDiv,
                         position: position+1,
                         onmouseover: function () {
                             stars.forEach(function(star) {
                                 if (star.position <= current.position) {
-                                    star.className = "fa fa-star rating-star-mine"
+                                    star.className = "fa fa-star rating-star rating-star-mine"
                                 } else {
-                                    star.className = "fa fa-star-o rating-star-mine"
+                                    star.className = "fa fa-star-o rating-star rating-star-mine"
                                 }
                             });
                         },
                         onmouseout: function() {
                             stars.forEach(function(star) {
                                 if (star.position <= (rating.rating || Math.round(movie.rating))) {
-                                    star.className = "fa fa-star rating-star" + (rating.rating ? "-mine" : "")
+                                    star.className = "fa fa-star rating-star rating-star" + (rating.rating ? "-mine" : "-avg")
                                 } else {
-                                    star.className = "fa fa-star-o rating-star" + (rating.rating ? "-mine" : "")
+                                    star.className = "fa fa-star-o rating-star rating-star" + (rating.rating ? "-mine" : "-avg")
                                 }
                             });
                         },
@@ -47,9 +47,9 @@ var movie = (function() {
                                 }).open();
                                 stars.forEach(function(star) {
                                     if (star.position <= (rating.rating || Math.round(movie.rating))) {
-                                        star.className = "fa fa-star rating-star" + (rating.rating ? "-mine" : "")
+                                        star.className = "fa fa-star rating-star rating-star" + (rating.rating ? "-mine" : "-avg")
                                     } else {
-                                        star.className = "fa fa-star-o rating-star" + (rating.rating ? "-mine" : "")
+                                        star.className = "fa fa-star-o rating-star rating-star" + (rating.rating ? "-mine" : "-avg")
                                     }
                                 });
                             }, function() {

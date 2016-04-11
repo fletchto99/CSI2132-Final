@@ -89,7 +89,7 @@ module.exports = {
 
             database.query({
                 text:
-                "SELECT A.Username, A.Password, A.Email, P.Profile_ID " +
+                "SELECT A.Username, A.Password, A.Email, P.Profile_ID, P.first_name, P.last_name " +
                 "FROM Account A " +
                     "INNER JOIN Profile P ON P.Profile_ID = A.Profile_ID " +
                 "WHERE A.Username = $1",

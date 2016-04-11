@@ -20,21 +20,17 @@ app.module(function(E, ajax) {
                 parent: container
             });
 
-            ajax.post('auth/find_movies', {
+            ajax.post('auth/movies/search', {
                 title: params.query
             }).then(function(response) {
                 container.removeChild(loading);
                 if (response.movies.length < 1) {
                     E('h1', {
+                        className: 'center',
                         textContent: "No movies found containing: "+ params.query +"!",
                         parent: container
                     });
                     return;
-                } else {
-                    E('h1', {
-                        textContent: "Movies for: "+ params.query +"!",
-                        parent: container
-                    });
                 }
 
                 var posters = [];
@@ -45,12 +41,12 @@ app.module(function(E, ajax) {
                     for (var i = 0; i < 10; i++) {
                         if (i+1 <= Math.round(movie.rating)) {
                             E('i', {
-                                className: 'fa fa-star rating-star',
+                                className: 'fa fa-star rating',
                                 parent: ratingDiv
                             })
                         } else {
                             E('i', {
-                                className: 'fa fa-star-o rating-star',
+                                className: 'fa fa-star-o rating',
                                 parent: ratingDiv
                             })
                         }
