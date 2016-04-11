@@ -120,5 +120,94 @@ module.exports = {
                 });
             });
         });
+    },
+
+    fetchProfile: function(params) {
+        return new Promise(function (resolve, reject) {
+            var errors = validator.validate(params, {
+                profile_id: validator.isInteger
+            });
+
+            if (errors) {
+                reject({
+                    error: true,
+                    type: 'validation',
+                    rejected_parameters: errors
+                });
+                return;
+            }
+
+            database.query({
+                text:
+                "SELECT * " +
+                "FROM Profile " +
+                "WHERE Profile_ID = $1",
+                values: [params.profile_id]
+            }).then(function (results) {
+                resolve(results.rows[0])
+            }, function (error) {
+                reject({
+                    error: 'Error logging in, please try again later!',
+                    dev_error: error
+                });
+            });
+        });
+    },
+
+    updateProfile: function(params) {
+        return new Promise(function (resolve, reject) {
+            var errors = validator.validate(params, {
+                profile_id: validator.isInteger,
+                first_name: validator.isString,
+                last_name: validator.isString
+            });
+
+            if (errors) {
+                reject({
+                    error: true,
+                    type: 'validation',
+                    rejected_parameters: errors
+                });
+                return;
+            }
+
+            if (params.dob == "") {
+                params.dob = null;
+            }
+
+            if (params.gender == "") {
+                params.gender = null;
+            }
+
+            if (params.occupation == "") {
+                params.occupation = null;
+            }
+
+            if (params.device_used == "") {
+                params.device_used = null;
+            }
+
+            database.query({
+                text:
+                "UPDATE Profile " +
+                "SET First_Name = $1, " +
+                    "last_name = $2, " +
+                    "dob = $3, " +
+                    "gender = $4, " +
+                    "occupation = $5, " +
+                    "device_used = $6 " +
+                "WHERE Profile_ID = $7",
+                values: [params.first_name, params.last_name, params.dob, params.gender, params.occupation, params.device_used, params.profile_id]
+            }).then(function () {
+                resolve(params)
+            }, function (error) {
+                reject({
+                    error: 'Error logging in, please try again later!',
+                    dev_error: error
+                });
+            });
+        });
     }
+
+
 };

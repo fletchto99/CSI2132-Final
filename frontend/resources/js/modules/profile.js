@@ -14,74 +14,80 @@ app.module(function(E, ajax) {
         },
 
         display: function(container, params) {
+        
+            ajax.get('auth/profile').then(function(response) {
 
-            var loading = E('i', {
-                className: 'fa fa-spinner fa-spin loading-animation',
-                parent: container
-            });
-
-            ajax.get('auth/movies/recommended').then(function(response) {
-                container.removeChild(loading);
-                if (response.movies.length < 1) {
-                    E('h1', {
-                        textContent: "No movies have been recommended for you!",
-                        parent: container
-                    });
-                    return;
-                } else {
-                    E('h2', {
-                        textContent: "Welcome, " + app.user.first_name + ". Here are your top 12 recommended movies:",
-                        parent: container
-                    });
-                }
-
-                var posters = [];
-
-                response.movies.forEach(function(movie) {
-                    var ratingDiv = E('div');
-                    for (var i = 0; i < 10; i++) {
-                        if (i+1 <= Math.round(movie.rating)) {
-                            E('i', {
-                                className: 'fa fa-star rating',
-                                parent: ratingDiv
-                            })
-                        } else {
-                            E('i', {
-                                className: 'fa fa-star-o rating',
-                                parent: ratingDiv
-                            })
-                        }
-
-                    }
-
-                    posters.push(E('div', {
-                        className: 'col-xs-4 col-sm-2 col-md-2 col-lg-2 movie-poster',
-                        children: [
-                            E('img', {
-                                className: 'img-responsive',
-                                src: tmdb.generateImagePath(movie.poster, tmdb.sizes.w154),
-                                onclick: function() {
-                                    window.movie.displayModal(movie);
+                var profileForm = E('div', {
+                    className: 'col-xs-8 col-sm-4 col-lg-4',
+                    children: [
+                        form({
+                            action: 'auth/profile',
+                            method: 'put',
+                            defaults: response.profile,
+                            inputs: [{
+                                param: 'first_name',
+                                label: 'First Name'
+                            },{
+                                param: 'last_name',
+                                label: 'Last Name'
+                            },{
+                                param: 'dob',
+                                label: 'Birthday',
+                                type: 'date'
+                            }, {
+                                param: 'gender',
+                                label: 'Gender',
+                                type: 'select',
+                                options: [{
+                                    text: 'Male',
+                                    value: 'M'
+                                }, {
+                                    text: 'Female',
+                                    value: 'F'
+                                }, {
+                                    text: 'Prefer not to say',
+                                    value: '',
+                                    default: true
+                                }]
+                            },{
+                                param: 'occupation',
+                                label: 'Occupation'
+                            },{
+                                param: 'device_used',
+                                label: 'Device'
+                            }],
+                            submit: {
+                                label: 'Save',
+                                then: function(user) {
+                                    new Alert({
+                                        message: 'Settings saved!',
+                                        timeout: true
+                                    })
                                 }
-                            }),
-                            ratingDiv
-                        ],
-                        parent: grid
-                    }));
+                            }
+                        })
+                    ]
                 });
 
-                var grid = E('div', {
-                    className: 'movie-grid',
-                    children: posters,
+                E('div', {
+                    className: 'profile-form',
+                    children:[
+                        E('div', {
+                            className: 'col-xs-2 col-sm-4 col-lg-4'
+                        }),
+                        profileForm,
+                        E('div', {
+                            className: 'col-xs-2 col-sm-4 col-lg-4'
+                        })
+                    ],
                     parent: container
-                });
-
-            }, function(error) {
+                })
+            }, function () {
                 E('h1', {
-                    textContent: "Error looking up movies!",
+                    textContent: 'Error retrieving profile information!',
                     parent: container
-                });
-            });
+                })
+            })
 
         }
     };

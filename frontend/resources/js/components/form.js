@@ -24,6 +24,8 @@ function form(params) {
             parent: form
         });
 
+        console.log(params.defaults);
+
         var value = params.defaults[input.param];
 
         var elem;
@@ -31,6 +33,19 @@ function form(params) {
             case 'textarea':
                 elem = E('textarea', {
                     textContent: value
+                });
+                break;
+            case 'select':
+                var options = [];
+                input.options.forEach(function(opt) {
+                    options.push(E('option', {
+                        textContent: opt.text,
+                        value: opt.value,
+                        selected: value == opt.value || (opt.default && value == null)
+                    }))
+                });
+                elem = E('select', {
+                    children: options
                 });
                 break;
             default:
