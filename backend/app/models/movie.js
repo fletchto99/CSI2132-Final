@@ -169,7 +169,11 @@ module.exports = {
                 "FROM Movie M "+
                 "WHERE M.Movie_ID NOT IN "+
                         "(SELECT TMP2.Movie_ID "+
+<<<<<<< b7a0468e684dc1bc035d174ca3fcab5dd6775fd9
                         "FROM ProfileMovie TMP2 " +
+=======
+                        "FROM ProfileMovie TMP2" +
+>>>>>>> Whoops... Recommendation Function
                         "WHERE TMP2.Profile_ID = $1) "+
                 "ORDER BY Rating DESC " +
                 "LIMIT 12;",
