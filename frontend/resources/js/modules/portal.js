@@ -20,8 +20,6 @@ app.module(function(E, ajax) {
                 parent: container
             });
 
-            console.log(app.user);
-
             ajax.get('auth/movies/recommended').then(function(response) {
                 container.removeChild(loading);
                 if (response.movies.length < 1) {
@@ -40,7 +38,6 @@ app.module(function(E, ajax) {
                 var posters = [];
 
                 response.movies.forEach(function(movie) {
-                    console.log(movie.rating);
                     var ratingDiv = E('div');
                     for (var i = 0; i < 10; i++) {
                         if (i+1 <= Math.round(movie.rating)) {

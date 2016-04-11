@@ -7,7 +7,6 @@ var movie = (function() {
         ajax.post('auth/movie/my_rating', {
             movie_id: movie.movie_id
         }).then(function(rating) {
-            console.log(rating);
             var stars = [];
             var ratingDiv = E('div');
             for (var i = 0; i < 10; i++) {
