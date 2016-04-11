@@ -53,15 +53,6 @@ var app = (function(window, document, E, ajax) {
                 parent: collapse
             });
 
-            // E('li', {
-            //     className: 'active',
-            //     children: [E('a', {
-            //         href: '#portal',
-            //         textContent: 'Portal'
-            //     })],
-            //     parent: nav
-            // });
-
             var controls = E('ul', {
                 className: 'nav navbar-nav navbar-right',
                 parent: collapse
@@ -108,6 +99,17 @@ var app = (function(window, document, E, ajax) {
                     })
                 ],
                 parent: searchContainer
+            });
+
+            E('li', {
+                children: [E('a',  {
+                    className: 'fa fa-user profile-link',
+                    textContent: "Profile",
+                    onclick: function() {
+                        app.load('profile');
+                    }
+                })],
+                parent: controls
             });
 
             E('li', {
