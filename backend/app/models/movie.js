@@ -159,13 +159,14 @@ module.exports = {
                 text:
                 "SELECT " +
                         "M.Movie_ID, M.Title, M.Release_Date, M.Description, M.Poster, " +
-                    "(SELECT AVG(PM.Rating) as Rating " +
-                "FROM ProfileMovie PM " +
-                "WHERE PM.Movie_ID = M.Movie_ID) AS Rating " +
-                "FROM Movie M " +
-                "WHERE PM.Profile_ID <> " + profile_id +
+                    "(SELECT AVG(TMP.Rating) as Rating " +
+                "FROM ProfileMovie TMP " +
+                "WHERE TMP.Movie_ID = M.Movie_ID) AS Rating " +
+                "FROM Movie M, ProfileMovie PM " +
+                "WHERE PM.Profile_ID <> $1" +
                 "ORDER BY Rating DESC " +
-                "LIMIT 12;"
+                "LIMIT 12;",
+                values: [params.profile_id]
             }).then(function(results) {
                 resolve(results.rows)
             }, function(error) {
