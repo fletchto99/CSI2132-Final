@@ -157,13 +157,20 @@ module.exports = {
 
             database.query({
                 text:
-                "SELECT " +
-                        "M.Movie_ID, M.Title, M.Release_Date, M.Description, M.Poster, " +
-                    "(SELECT AVG(TMP.Rating) as Rating " +
-                "FROM ProfileMovie TMP " +
-                "WHERE TMP.Movie_ID = M.Movie_ID) AS Rating " +
-                "FROM Movie M, ProfileMovie PM " +
-                "WHERE PM.Profile_ID <> $1" +
+                "SELECT "+
+                    "M.Movie_ID, "+
+                    "M.Title, "+
+                    "M.Release_Date, "+
+                    "M.Description, "+
+                    "M.Poster, "+
+                    "(SELECT AVG(TMP.Rating) AS Rating "+
+                        "FROM ProfileMovie TMP "+
+                        "WHERE TMP.Movie_ID = M.Movie_ID) AS Rating "+
+                "FROM Movie M "+
+                "WHERE M.Movie_ID NOT IN "+
+                        "(SELECT TMP2.Movie_ID "+
+                        "FROM ProfileMovie TMP2" +
+                        "WHERE TMP2.Profile_ID <> $1) "+
                 "ORDER BY Rating DESC " +
                 "LIMIT 12;",
                 values: [params.profile_id]

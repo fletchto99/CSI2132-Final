@@ -6,4 +6,5 @@ INSERT INTO PROFILE (First_Name, Last_Name, DOB, Gender, Occupation, Device_Used
 
 
 INSERT INTO Account (Password, Username, Email, Join_Date, Profile_ID ) VALUES 
-('jfonda', 'jfonda', 'jfonda@gmail.com', CURRENT_DATE, 1),
+('jfonda', 'jfonda', 'jfonda@gmail.com', DATE '2015-02-01', 1),
+('jsmith', 'jsmith', 'jsmith@gmail.com', DATE '2016-05-02', 2),
