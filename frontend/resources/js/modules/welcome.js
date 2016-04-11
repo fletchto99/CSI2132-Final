@@ -54,7 +54,7 @@ app.module(function(E, ajax) {
                         modal.animate([
                             {transform: 'scale(1, 1'},
                             {transform: 'scale(0, 0)'}
-                        ], 1500).onfinish = function() {
+                        ], 250).onfinish = function() {
                             modal.parentElement.removeChild(modal);
                             app.load('portal');
                             new Alert({
@@ -101,7 +101,7 @@ app.module(function(E, ajax) {
                         modal.animate([
                             {transform: 'scale(1, 1'},
                             {transform: 'scale(0, 0)'}
-                        ], 150).onfinish = function () {
+                        ], 250).onfinish = function () {
                             modal.parentElement.removeChild(modal);
                             app.load('portal');
                         };
