@@ -32,7 +32,7 @@ app.module(function(E, ajax) {
                     return;
                 } else {
                     E('h2', {
-                        textContent: "Welcome, " + app.user.first_name + ". Here are your to 12 recommended movies:",
+                        textContent: "Welcome, " + app.user.first_name + ". Here are your top 12 recommended movies:",
                         parent: container
                     });
                 }
