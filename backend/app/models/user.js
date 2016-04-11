@@ -48,19 +48,21 @@ module.exports = {
             }).then(function(results) {
 
                 var secure_password = security.hashPassword(params.password);
-
                 return database.query({
-                    text: 'INSERT INTO Account(Username, Password, Email, Profile_ID) VALUES ($1, $2, $3, $4)',
+                    text: 'INSERT INTO Account(Username, Password, Email, Profile_ID) VALUES ($1, $2, $3, $4) returning Profile_ID',
                     values: [params.username, secure_password, params.email, results.rows[0].profile_id]
                 });
             }, function () {
                 reject({
                     error: 'Error generating account!'
                 });
-            }).then(function() {
+            }).then(function(results) {
                 resolve({
                     username: params.username,
-                    email: params.email
+                    email: params.email,
+                    first_name: params.firstname,
+                    last_name: params.lastname,
+                    profile_id: results.rows[0].profile_id
                 })
             }, function(error) {
                 reject({
@@ -112,7 +114,6 @@ module.exports = {
                     });
                 }
             }, function (error) {
-                console.log(error);
                 reject({
                     error: 'Error logging in, please try again later!',
                     dev_error: error
