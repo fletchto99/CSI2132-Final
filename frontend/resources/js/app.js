@@ -178,7 +178,7 @@ var app = (function(window, document, E, ajax) {
         E('li', {
             children: [E('a',  {
                 className: 'fa fa-user profile-link active',
-                textContent: app.user.first_name,
+                textContent: app.user.username,
                 onclick: function() {
                     app.load('profile');
                 }

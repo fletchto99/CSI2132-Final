@@ -2,7 +2,7 @@ var movie = (function() {
 
     var movie = {};
 
-    movie.displayModal = function(movie) {
+    movie.displayModal = function(movie, onClose) {
 
         ajax.post('auth/movie/my_rating', {
             movie_id: movie.movie_id
@@ -94,7 +94,12 @@ var movie = (function() {
 
             new Modal({
                 title: movie.title,
-                content: content
+                content: content,
+                onclose: function() {
+                    if (onClose) {
+                        onClose();
+                    }
+                }
             }).open();
         }, function() {
 

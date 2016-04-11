@@ -61,7 +61,9 @@ app.module(function(E, ajax) {
                                 className: 'img-responsive',
                                 src: tmdb.generateImagePath(movie.poster, tmdb.sizes.w154),
                                 onclick: function() {
-                                    window.movie.displayModal(movie);
+                                    window.movie.displayModal(movie, function() {
+                                        app.reload();
+                                    });
                                 }
                             }),
                             ratingDiv

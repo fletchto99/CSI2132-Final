@@ -63,8 +63,6 @@ module.exports = {
                 return;
             }
 
-            console.log("Hello");
-
             database.query({
                 text:
                 "SELECT Rating " +

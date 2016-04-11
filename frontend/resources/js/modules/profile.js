@@ -61,6 +61,8 @@ app.module(function(E, ajax) {
                             submit: {
                                 label: 'Save',
                                 then: function(user) {
+                                    app.user.first_name = user.profile.first_name;
+                                    app.user.last_name = user.profile.last_name;
                                     new Alert({
                                         message: 'Settings saved!',
                                         timeout: true
