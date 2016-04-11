@@ -285,8 +285,7 @@ SELECT
   TMP.First_Name,
   TMP.Last_Name,
   TMP.TopicName,
-  TMP.RatingDistance,
-  MAX(RatingDistance)
+  MAX(RatingDistance) as MaxRatingDistance
 FROM (SELECT
         P1.First_Name,
         P1.Last_Name,
@@ -298,4 +297,5 @@ FROM (SELECT
         INNER JOIN Profile P1 ON P1.Profile_ID = PM1.Profile_ID
         INNER JOIN Account A1 ON A1.Profile_ID = P1.Profile_ID
       GROUP BY P1.First_Name, P1.Last_Name, T1.Name) AS TMP
-GROUP BY TMP.First_Name, TMP.Last_Name, TMP.TopicName, TMP.RatingDistance
+GROUP BY TMP.First_Name, TMP.Last_Name, TMP.TopicName
+ORDER BY MaxRatingDistance DESC;

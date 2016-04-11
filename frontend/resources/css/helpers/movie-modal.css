@@ -10,3 +10,8 @@
 .rating-star-mine {
     color: #024089;
 }
+
+.movie-description {
+	overflow-y: scroll;
+	max-height: 400px;
+}
