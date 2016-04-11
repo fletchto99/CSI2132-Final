@@ -17,5 +17,6 @@ router.use('/register', require('./session/register'));
  */
 router.use('/auth/whoami', require('./authenticated/whoami'));
 router.use('/auth/find_movies', require('./authenticated/find_movies'));
+router.use('/auth/movie/my_rating', require('./authenticated/my_movie_rating'));
 
 module.exports = router;
