@@ -24,4 +24,6 @@ router.use('/auth/movies/recommended', require('./authenticated/movies/recommend
 
 router.use('/auth/actor/in_movie', require('./authenticated/actors/find_actors'));
 
+router.use('/auth/director/directed_movie', require('./authenticated/directors/find_directors'));
+
 module.exports = router;
