@@ -76,10 +76,43 @@ var movie = (function() {
             });
 
             var infoContainer = E('div', {
-                className: 'col-md-6',
+                className: 'col-md-6 movie-description',
                 children: [
                     E('p', {
                         textContent: movie.description
+                    }),
+                    E('div', {
+                        children:[
+                            E('span', {
+                                textContent: 'Directors:'
+                            }),
+                            E('ul', {
+                                children: [
+                                    E('li', {
+                                        textContent: 'Director 1'
+                                    }),
+                                    E('li', {
+                                        textContent: 'Director 2'
+                                    })
+                                ]
+                            }),
+                            E('span', {
+                                textContent: 'Actors:'
+                            }),
+                            E('ul', {
+                                children: [
+                                    E('li', {
+                                        textContent: 'Actor 1'
+                                    }),
+                                    E('li', {
+                                        textContent: 'Actor 2'
+                                    }),
+                                    E('li', {
+                                        textContent: 'Actor 3'
+                                    })
+                                ]
+                            })
+                        ]
                     })
                 ]
             });
