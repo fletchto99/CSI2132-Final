@@ -1,16 +1,18 @@
 -- dummy_users.sql
 
+
+--Run before populate script
 INSERT INTO Profile (First_Name, Last_Name, DOB, Gender, Occupation, Device_Used) VALUES
-('Rowan', 'Atkinson', DATE '1955-01-06', M, 'Comedian', 'iPad'),
-('Jane', 'Fonda', DATE '1937-12-21', F, 'Actress', 'iPhone'),
-('Isaac', 'Newton', DATE '1642-12-25', M, 'Physicist', 'Lenovo Thinkpad II'),
-('Montell', 'Jordan', DATE '1968-12-03', M, 'Singer', 'Macbook Air'),
-('Justin', 'Trudeau', DATE '1971-12-25', M, 'Prime Minister of Canada', 'Unknown'),
-('Ralph', 'Wiggum', DATE '1988,-03-07', M, 'Student at Springfield Elementary School', 'Samsung S3'),
-('Marie', 'Curie', DATE '1867-11-07', F, 'Physicist', 'iPhone 3'),
-('Chris', 'Neil', DATE '1979-06-18', M, 'Hockey Player, Ottawa Senators', 'iPad 3'),
-('Daniel', 'Alfredsson', DATE '1972-12-11', M, 'Hockey Player, Ottawa Senators', 'PC'),
-('John', 'Smith', DATE '1966-01-11', M, 'Chemist', 'iPad');
+('Rowan', 'Atkinson', DATE '1955-01-06', 'M', 'Comedian', 'iPad'),
+('Jane', 'Fonda', DATE '1937-12-21', 'F', 'Actress', 'iPhone'),
+('Isaac', 'Newton', DATE '1642-12-25', 'M', 'Physicist', 'Lenovo Thinkpad II'),
+('Montell', 'Jordan', DATE '1968-12-03', 'M', 'Singer', 'Macbook Air'),
+('Justin', 'Trudeau', DATE '1971-12-25', 'M', 'Prime Minister of Canada', 'Unknown'),
+('Ralph', 'Wiggum', DATE '1988-03-07', 'M', 'Student at Springfield Elementary School', 'Samsung S3'),
+('Marie', 'Curie', DATE '1867-11-07', 'F', 'Physicist', 'iPhone 3'),
+('Chris', 'Neil', DATE '1979-06-18', 'M', 'Hockey Player, Ottawa Senators', 'iPad 3'),
+('Daniel', 'Alfredsson', DATE '1972-12-11', 'M', 'Hockey Player, Ottawa Senators', 'PC'),
+('John', 'Smith', DATE '1966-01-11', 'M', 'Chemist', 'iPad');
 
 
 INSERT INTO Account (Password, Username, Email, Join_Date, Profile_ID ) VALUES 
@@ -25,6 +27,8 @@ INSERT INTO Account (Password, Username, Email, Join_Date, Profile_ID ) VALUES
 ('alife', 'alfie', 'alfie@ottawasenators.ca', DATE '2014-04-25', 9),
 ('jsmith', 'jsmith', 'jsmith@gmail.com', DATE '2016-05-02', 10);
 
+
+--Run after populate script
 INSERT INTO ProfileMovie(Profile_ID, Movie_ID, Rating) VALUES
 (1, 1, 2),
 (2, 1, 1),
@@ -429,4 +433,4 @@ INSERT INTO ProfileMovie(Profile_ID, Movie_ID, Rating) VALUES
 (85, 10, 4),
 (86, 10, 3),
 (99, 10, 1),
-(100, 10, 6),
+(100, 10, 6)
