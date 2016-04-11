@@ -67,6 +67,7 @@ app.module(function(E, ajax) {
                                         message: 'Settings saved!',
                                         timeout: true
                                     }).open();
+                                    app.load('portal');
                                 }
                             }
                         })
