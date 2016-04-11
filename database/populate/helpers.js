@@ -204,11 +204,11 @@ var buildProfiles = function(mappings) {
     return new Promise(function (resolve, reject) {
         var profiles = [];
 
-        for (var i = 0; i < 100; i++) {
+        for (var i = 10; i < 100; i++) {
             profiles.push({
                 id: i + 1,
                 first_name: 'Dummy',
-                last_name: 'user'
+                last_name: 'User'
             });
         }
 
