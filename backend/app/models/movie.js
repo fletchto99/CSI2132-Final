@@ -163,6 +163,7 @@ module.exports = {
                 "FROM ProfileMovie PM " +
                 "WHERE PM.Movie_ID = M.Movie_ID) AS Rating " +
                 "FROM Movie M " +
+                "WHERE PM.Profile_ID <> " + profile_id +
                 "ORDER BY Rating DESC " +
                 "LIMIT 12;"
             }).then(function(results) {
