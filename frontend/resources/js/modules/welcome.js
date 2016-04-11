@@ -53,9 +53,6 @@ app.module(function(E, ajax) {
                         app.user = user;
                         modal.animate([
                             {transform: 'scale(1, 1'},
-                            {transform: 'scale(1.5, 1.5)'},
-                            {transform: 'scale(0.5, 0.5)'},
-                            {transform: 'scale(1.5, 1.5)'},
                             {transform: 'scale(0, 0)'}
                         ], 1500).onfinish = function() {
                             modal.parentElement.removeChild(modal);
