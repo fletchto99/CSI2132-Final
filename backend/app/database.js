@@ -31,6 +31,7 @@ module.exports = {
                 values: params.values
             }, function (error, result) {
                 if (error) {
+                    console.log(error);
                     reject(error);
                 } else {
                     resolve(result);
