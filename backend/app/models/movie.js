@@ -169,8 +169,8 @@ module.exports = {
                 "FROM Movie M "+
                 "WHERE M.Movie_ID NOT IN "+
                         "(SELECT TMP2.Movie_ID "+
-                        "FROM ProfileMovie TMP2" +
-                        "WHERE TMP2.Profile_ID <> $1) "+
+                        "FROM ProfileMovie TMP2 " +
+                        "WHERE TMP2.Profile_ID = $1) "+
                 "ORDER BY Rating DESC " +
                 "LIMIT 12;",
                 values: [params.profile_id]
