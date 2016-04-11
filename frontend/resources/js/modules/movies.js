@@ -15,21 +15,15 @@ app.module(function(E, ajax) {
 
         display: function(container, params) {
 
-            var displayMovie = function(movie) {
-
-                var content = E('div');
-
-
-
-                new Modal({
-                    title: movie.title,
-                    content: content
-                }).open();
-            };
+            var loading = E('i', {
+                className: 'fa fa-spinner fa-spin loading-animation',
+                parent: container
+            });
 
             ajax.post('auth/find_movies', {
                 title: params.query
             }).then(function(response) {
+                container.removeChild(loading);
                 if (response.movies.length < 1) {
                     E('h1', {
                         textContent: "No movies found containing: "+ params.query +"!",
@@ -49,7 +43,7 @@ app.module(function(E, ajax) {
 
                     var ratingDiv = E('div');
                     for (var i = 0; i < 10; i++) {
-                        if (i < movie.rating) {
+                        if (i+1 <= Math.round(movie.rating)) {
                             E('i', {
                                 className: 'fa fa-star rating-star',
                                 parent: ratingDiv
@@ -70,7 +64,7 @@ app.module(function(E, ajax) {
                                 className: 'img-responsive',
                                 src: tmdb.generateImagePath(movie.poster, tmdb.sizes.w154),
                                 onclick: function() {
-                                    displayMovie(movie);
+                                    window.movie.displayModal(movie);
                                 }
                             }),
                             ratingDiv
@@ -87,7 +81,7 @@ app.module(function(E, ajax) {
 
             }, function(error) {
                 E('h1', {
-                    textContent: "Error lookin up movies!",
+                    textContent: "Error looking up movies!",
                     parent: container
                 });
             });
