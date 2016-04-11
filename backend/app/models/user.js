@@ -88,7 +88,11 @@ module.exports = {
             }
 
             database.query({
-                text: "SELECT Username, Password, Email FROM Account WHERE Username = $1",
+                text:
+                "SELECT A.Username, A.Password, A.Email, P.Profile_ID " +
+                "FROM Account A " +
+                    "INNER JOIN Profile P ON P.Profile_ID = A.Profile_ID " +
+                "WHERE A.Username = $1",
                 values: [params.username]
             }).then(function (results) {
 
@@ -108,6 +112,7 @@ module.exports = {
                     });
                 }
             }, function (error) {
+                console.log(error);
                 reject({
                     error: 'Error logging in, please try again later!',
                     dev_error: error
