@@ -51,6 +51,7 @@ app.module(function(E, ajax) {
                     label: 'Login',
                     then: function(user) {
                         app.user = user;
+                        app.initNavbar();
                         modal.animate([
                             {transform: 'scale(1, 1'},
                             {transform: 'scale(0, 0)'}
@@ -97,6 +98,7 @@ app.module(function(E, ajax) {
                         }).open();
 
                         app.user = user;
+                        app.initNavbar();
 
                         modal.animate([
                             {transform: 'scale(1, 1'},

@@ -25,114 +25,6 @@ var app = (function(window, document, E, ajax) {
             parent: document.body
         });
 
-        var buildNavbar = function navbar(container) {
-            var navbar = E('nav', {
-                className: 'navbar navbar-inverse',
-                parent: container
-            });
-
-            var header = E('div', {
-                className: 'navbar-header',
-                children: [E('div', {
-                    className: 'navbar-brand',
-                    textContent: app.name,
-                    onclick: function() {
-                        app.load('portal');
-                    }
-                })],
-                parent: navbar
-            });
-
-            var collapse = E('div', {
-                className: 'collapse navbar-collapse',
-                parent: navbar
-            });
-
-            var nav = E('ul', {
-                className: 'nav navbar-nav',
-                parent: collapse
-            });
-
-            var controls = E('ul', {
-                className: 'nav navbar-nav navbar-right',
-                parent: collapse
-            });
-
-            var search = E('input', {
-                type: 'text',
-                className: 'form-control',
-                placeholder: 'Movie Name',
-                parent: controls,
-                onkeypress: function (e) {
-                    e.which == 13 && loadMovie()
-                }
-            });
-
-            var loadMovie = function() {
-                if (search.value.length < 1) {
-                    new Alert({
-                        message: 'Please enter a movie to search for!',
-                        type: 'warning',
-                        timeout: true
-                    }).open();
-                } else {
-                    app.load('movies', {
-                       query: search.value
-                    });
-                    search.value = "";
-                }
-            };
-
-            var searchContainer = E('div', {
-                className: 'search-bar',
-                parent: collapse
-            });
-
-            var form = E('div', {
-                className: 'navbar-form',
-                children:[
-                    search,
-                    E('button', {
-                        textContent: 'Find a Movie',
-                        className: 'btn btn-default',
-                        onclick: loadMovie
-                    })
-                ],
-                parent: searchContainer
-            });
-
-            E('li', {
-                children: [E('a',  {
-                    className: 'fa fa-user profile-link active',
-                    textContent: "Profile",
-                    onclick: function() {
-                        app.load('profile');
-                    }
-                })],
-                parent: controls
-            });
-
-            E('li', {
-                children: [E('button',  {
-                    className: 'btn btn-default',
-                    textContent: 'Logout',
-                    style: {
-                        marginTop: '15px',
-                        marginRight: '15px'
-                    },
-                    onclick: function() {
-                        ajax.post('logout').then(function() {
-                            delete app.user;
-                            app.load('welcome');
-                        });
-                    }
-                })],
-                parent: controls
-            });
-        };
-
-        buildNavbar(navbarContainer);
-
         // Handle hash changes
         var hashchange = function() {
             var hash = window.location.hash.substring(1);
@@ -192,6 +84,7 @@ var app = (function(window, document, E, ajax) {
         // Authenticate the user, otherwise redirect to login module
         ajax.post('login').then(function(user) {
             app.user = user;
+            app.initNavbar();
             app.load(moduleToLoad || 'portal', paramsToLoad);
             new Alert({
                 message: 'Welcome, ' + app.user.username,
@@ -199,6 +92,116 @@ var app = (function(window, document, E, ajax) {
             }).open();
         }, function() {
             app.load('welcome');
+        });
+    };
+
+    app.initNavbar = function navbar() {
+        if (navbarContainer.children.length > 0) {
+            return;
+        }
+
+        var navbar = E('nav', {
+            className: 'navbar navbar-inverse',
+            parent: navbarContainer
+        });
+
+        var header = E('div', {
+            className: 'navbar-header',
+            children: [E('div', {
+                className: 'navbar-brand',
+                textContent: app.name,
+                onclick: function() {
+                    app.load('portal');
+                }
+            })],
+            parent: navbar
+        });
+
+        var collapse = E('div', {
+            className: 'collapse navbar-collapse',
+            parent: navbar
+        });
+
+        var nav = E('ul', {
+            className: 'nav navbar-nav',
+            parent: collapse
+        });
+
+        var controls = E('ul', {
+            className: 'nav navbar-nav navbar-right',
+            parent: collapse
+        });
+
+        var search = E('input', {
+            type: 'text',
+            className: 'form-control',
+            placeholder: 'Movie Name',
+            parent: controls,
+            onkeypress: function (e) {
+                e.which == 13 && loadMovie()
+            }
+        });
+
+        var loadMovie = function() {
+            if (search.value.length < 1) {
+                new Alert({
+                    message: 'Please enter a movie to search for!',
+                    type: 'warning',
+                    timeout: true
+                }).open();
+            } else {
+                app.load('movies', {
+                    query: search.value
+                });
+                search.value = "";
+            }
+        };
+
+        var searchContainer = E('div', {
+            className: 'search-bar',
+            parent: collapse
+        });
+
+        var form = E('div', {
+            className: 'navbar-form',
+            children:[
+                search,
+                E('button', {
+                    textContent: 'Find a Movie',
+                    className: 'btn btn-default',
+                    onclick: loadMovie
+                })
+            ],
+            parent: searchContainer
+        });
+
+        E('li', {
+            children: [E('a',  {
+                className: 'fa fa-user profile-link active',
+                textContent: app.user.first_name,
+                onclick: function() {
+                    app.load('profile');
+                }
+            })],
+            parent: controls
+        });
+
+        E('li', {
+            children: [E('button',  {
+                className: 'btn btn-default',
+                textContent: 'Logout',
+                style: {
+                    marginTop: '15px',
+                    marginRight: '15px'
+                },
+                onclick: function() {
+                    ajax.post('logout').then(function() {
+                        delete app.user;
+                        app.load('welcome');
+                    });
+                }
+            })],
+            parent: controls
         });
     };
 

@@ -40,7 +40,7 @@ window.ajax = (function () {
             };
 
 
-            xhr.timeout = 3000;
+            xhr.timeout = 5000;
             xhr.open(method, 'api/' + url);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(params));
