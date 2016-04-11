@@ -234,3 +234,68 @@ WHERE TMP.AvgRating > ((SELECT AVG(PM2.Rating) AS GlobalAverage
                         FROM ProfileMovie PM2)
                        + (0.10) * (SELECT STDDEV(PM1.Rating) AS GlobalDeviation
                                    FROM ProfileMovie PM1))
+
+
+-- n. Find the names, join‐date and profiling information (age‐range, gender, and so on) of 
+-- the users that rated a specific movie (say movie Z) the most frequently.
+-- NOTE: In our implementation, you can only ever rate once. 
+
+SELECT
+  M.Title,
+  PM.Rating,
+-- not implemented yet  PM.Comment,
+  P.First_Name,
+  P.Last_Name,
+  P.Dob,
+  P.Occupation,
+  P.Gender
+FROM Profile P
+INNER JOIN ProfileMovie PM ON PM.Profile_ID = P.Profile_ID
+INNER JOIN Movie M ON PM.Movie_ID = M.Movie_ID
+WHERE M.Title ILIKE='Interstellar'
+
+-- o. Find the names and emails of all users who gave ratings that are lower than that of a 
+-- rater with a name called John Smith. (Note that there may be more than one rater with this name).
+
+SELECT
+  P.First_Name,
+  P.Last_Name,
+  P.Dob,
+  P.Occupation,
+  P.Gender,
+  A.Email,
+  A.Join_date
+FROM Profile P
+  INNER JOIN ProfileMovie PM ON PM.Profile_ID = P.Profile_ID
+  INNER JOIN Account A ON P.Profile_ID = A.Profile_ID
+WHERE PM.Rating <
+      (SELECT PM1.Rating
+       FROM ProfileMovie PM1
+         INNER JOIN Profile P1 ON P1.Profile_ID = PM1.Profile_ID
+       WHERE P1.First_Name = 'John'
+             AND P1.Last_Name = 'Smith'
+             AND PM1.Movie_ID = PM.Movie_ID)
+
+-- p. Find the names and emails of the users that provide the most diverse ratings within 
+-- a specific genre. Display this information together with the movie names and the ratings. 
+-- For example, Jane Doe may have rated terminator 1 as a 1, Terminator 2 as a 10 and 
+-- Terminator 3 as a 3. Clearly, she changes her mind quite often!             
+
+SELECT
+  TMP.First_Name,
+  TMP.Last_Name,
+  TMP.TopicName,
+  TMP.RatingDistance,
+  MAX(RatingDistance)
+FROM (SELECT
+        P1.First_Name,
+        P1.Last_Name,
+        @(MAX(PM1.Rating) - MIN(PM1.Rating)) AS RatingDistance,
+        T1.Name                              AS TopicName
+      FROM ProfileMovie PM1
+        INNER JOIN MovieTopic MT1 ON MT1.Movie_ID = PM1.Movie_ID
+        INNER JOIN Topic T1 ON T1.Topic_ID = MT1.Topic_ID
+        INNER JOIN Profile P1 ON P1.Profile_ID = PM1.Profile_ID
+        INNER JOIN Account A1 ON A1.Profile_ID = P1.Profile_ID
+      GROUP BY P1.First_Name, P1.Last_Name, T1.Name) AS TMP
+GROUP BY TMP.First_Name, TMP.Last_Name, TMP.TopicName, TMP.RatingDistance
