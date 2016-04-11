@@ -9,3 +9,11 @@
 .form-control {
     margin: 0 10px;
 }
+
+.profile-link {
+    font-size: 20pt;
+}
+
+.profile-link::before {
+    margin-right: 5px;
+}

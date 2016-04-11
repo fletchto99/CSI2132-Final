@@ -103,7 +103,7 @@ var app = (function(window, document, E, ajax) {
 
             E('li', {
                 children: [E('a',  {
-                    className: 'fa fa-user profile-link',
+                    className: 'fa fa-user profile-link active',
                     textContent: "Profile",
                     onclick: function() {
                         app.load('profile');
